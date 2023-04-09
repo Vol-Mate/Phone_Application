@@ -7,11 +7,12 @@ plugins {
 android {
     namespace 'com.example.phoneapplication'
     compileSdk 33
+    buildToolsVersion '33.0.2'
 
     defaultConfig {
         applicationId "com.example.phoneapplication"
         minSdk 21
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -44,4 +45,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     implementation 'com.google.android.gms:play-services-auth:19.2.0'
+    implementation 'com.lorentzos.swipecards:library:1.0.9'
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
 }
