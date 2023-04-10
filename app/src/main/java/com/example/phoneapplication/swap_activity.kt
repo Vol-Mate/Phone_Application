@@ -1,8 +1,9 @@
 package com.example.phoneapplication
 
-import android.R
+//import android.R
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ListView
 import android.widget.Toast
@@ -21,7 +22,7 @@ import com.example.phoneapplication.arrayAdapter;
 import com.example.phoneapplication.cards;
 
 class swap_activity : AppCompatActivity(){
-    private val cards_data: Array<cards>
+    protected lateinit var cards_data: Array<cards>
     private var arrayAdapter: com.example.phoneapplication.arrayAdapter? = null
     private val i = 0
     private lateinit var auth: FirebaseAuth
@@ -39,14 +40,14 @@ class swap_activity : AppCompatActivity(){
         //currentUId = mAuth!!.currentUser!!.uid
         //checkUserSex()
         rowItems = ArrayList<cards>()
-        arrayAdapter = arrayAdapter(this, R.layout.item, rowItems)
+        arrayAdapter = arrayAdapter(this, R.layout.item, rowItems as ArrayList<cards>)
         val flingContainer = findViewById<View>(R.id.frame) as SwipeFlingAdapterView
         flingContainer.adapter = arrayAdapter
         flingContainer.setFlingListener(object : onFlingListener {
             override fun removeFirstObjectInAdapter() {
                 Log.d("LIST", "removed object!")
                 rowItems!!.removeAt(0)
-                arrayAdapter.notifyDataSetChanged()
+                arrayAdapter!!.notifyDataSetChanged()
             }
 
             override fun onLeftCardExit(dataObject: Any) {
