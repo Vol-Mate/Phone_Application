@@ -52,7 +52,7 @@ class swap_activity : AppCompatActivity(){
 
             override fun onLeftCardExit(dataObject: Any) {
                 val obj: cards = dataObject as cards
-                val userId: String? = obj.getUserId()
+                val userId: String? = obj.userId
                 //usersDb.child(userId).child("connections").child("nope").child(currentUId)
                 //    .setValue(true)
                 Toast.makeText(this@swap_activity, "Left", Toast.LENGTH_SHORT).show()

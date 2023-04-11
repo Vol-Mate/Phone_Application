@@ -2,22 +2,13 @@ package com.example.phoneapplication
 
 import androidx.appcompat.app.AppCompatActivity
 
-class cards : AppCompatActivity() {
-    private var userId: String? = null
-    private var name: String? = null
-    private var profileImageUrl: String? = null
-    fun cards(userId: String?, name: String?, profileImageUrl: String?) {
-        this.userId = userId
-        this.name = name
-        this.profileImageUrl = profileImageUrl
-    }
-
+class cards(internal var userId: String?, internal var name: String?, internal var profileImageUrl: String?) {
     fun getUserId(): String? {
         return userId
     }
 
-    fun setUserID(userID: String?) {
-        userId = userId
+    fun setUserId(userId: String?) {
+        this.userId = userId
     }
 
     fun getName(): String? {
@@ -36,3 +27,7 @@ class cards : AppCompatActivity() {
         this.profileImageUrl = profileImageUrl
     }
 }
+
+
+
+

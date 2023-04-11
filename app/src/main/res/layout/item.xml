@@ -3,25 +3,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_gravity="center"
     android:layout_width="350dp"
-    android:layout_height="670dp">
+    android:layout_height="500dp">
 
-    <TextView
-        android:id="@+id/helloText"
+
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#6BFF9800"
-        android:gravity="center"
-        tools:text="hello"
+        android:id="@+id/image"
+        android:scaleType="centerCrop"/>
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom|left"
         android:textColor="@android:color/black"
-        android:textSize="40sp" />
+        android:textSize="40sp"
+        tools:text="name" />
 
     <View
         android:id="@+id/item_swipe_left_indicator"
         android:alpha="0"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_margin="10dp"
-        android:background="#6BFF9800" />
+        android:layout_margin="10dp" />
 
     <View
         android:id="@+id/item_swipe_right_indicator"
@@ -29,7 +34,6 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_margin="10dp"
-        android:layout_gravity="right"
-        android:background="#6BFF9800" />
+        android:layout_gravity="right" />
 
 </FrameLayout>
