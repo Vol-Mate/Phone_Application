@@ -10,21 +10,22 @@
         android:layout_width="263dp"
         android:layout_height="55dp"
         android:layout_marginTop="20dp"
-        android:text="Main Menu"
-        android:textSize="40sp"
         android:gravity="center"
+        android:text="Main Menu"
         android:textColor="@color/black"
+        android:textSize="40sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.462"
+        app:layout_constraintHorizontal_bias="0.466"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.118" />
+        app:layout_constraintVertical_bias="0.114" />
 
     <Button
         android:id="@+id/QuestionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="#6BFF9800"
         android:text="Quesion"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -32,20 +33,42 @@
         app:layout_constraintHorizontal_bias="0.442"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="#6BFF9800"
-        app:layout_constraintVertical_bias="0.762" />
+        app:layout_constraintVertical_bias="0.862" />
 
     <Button
         android:id="@+id/MatchButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Match"
         android:background="#6BFF9800"
+        android:text="Match"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.755"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.762" />
+        app:layout_constraintVertical_bias="0.862" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="357dp"
+        android:layout_height="618dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.681"
+        app:srcCompat="@drawable/img_0575" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="410dp"
+        android:layout_height="77dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/img_0577" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

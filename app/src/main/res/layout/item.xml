@@ -7,15 +7,16 @@
 
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:id="@+id/image"
-        android:scaleType="centerCrop"/>
+        android:layout_width="match_parent"
+        android:layout_height="460dp"
+        android:scaleType="centerCrop" />
 
     <TextView
         android:id="@+id/name"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="460dp"
+        android:background="#F7DCC0"
         android:gravity="bottom|left"
         android:textColor="@android:color/black"
         android:textSize="40sp"
@@ -35,5 +36,7 @@
         android:layout_height="20dp"
         android:layout_margin="10dp"
         android:layout_gravity="right" />
+
+
 
 </FrameLayout>
