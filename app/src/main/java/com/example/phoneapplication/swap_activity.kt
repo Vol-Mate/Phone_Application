@@ -23,7 +23,7 @@ import com.example.phoneapplication.cards;
 
 class swap_activity : AppCompatActivity(){
     protected lateinit var cards_data: Array<cards>
-    private var arrayAdapter: com.example.phoneapplication.arrayAdapter? = null
+    private var arrayAdapter: arrayAdapter? = null
     private val i = 0
     private lateinit var auth: FirebaseAuth
     private var currentUId: String? = null

@@ -13,8 +13,11 @@
         android:theme="@style/Theme.PhoneApplication"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity3"
-            android:exported="false" />
+            android:name="com.example.phoneapplication.swap_activity"/>
+
+        <activity
+            android:name="com.example.phoneapplication.main_menu"/>
+
         <activity
             android:name=".MainActivity2"
             android:exported="false" />
