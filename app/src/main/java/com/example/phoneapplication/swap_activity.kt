@@ -34,14 +34,14 @@ class swap_activity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_swap)
 
-        al.add("php")
-        al.add("c")
-        al.add("python")
-        al.add("java")
-        al.add("html")
-        al.add("c++")
-        al.add("css")
-        al.add("javascript")
+        al.add("mark")
+        al.add("isha")
+        al.add("bob")
+        al.add("pooja")
+        al.add("nayana")
+        al.add("jack")
+        al.add("ann")
+        al.add("justin")
 
         arrayAdapter = ArrayAdapter(this, R.layout.item, R.id.name, al)
         val flingContainer = findViewById<View>(R.id.frame) as SwipeFlingAdapterView
