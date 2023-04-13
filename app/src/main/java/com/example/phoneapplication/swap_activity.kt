@@ -1,10 +1,12 @@
 package com.example.phoneapplication
 
 //import android.R
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -22,7 +24,61 @@ import com.example.phoneapplication.arrayAdapter;
 import com.example.phoneapplication.cards;
 
 class swap_activity : AppCompatActivity(){
-    protected lateinit var cards_data: Array<cards>
+    private val al = ArrayList<String>()
+    private lateinit var arrayAdapter: ArrayAdapter<String>
+    private var i = 0
+
+    lateinit var flingContainer: SwipeFlingAdapterView
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_swap)
+
+        al.add("php")
+        al.add("c")
+        al.add("python")
+        al.add("java")
+        al.add("html")
+        al.add("c++")
+        al.add("css")
+        al.add("javascript")
+
+        arrayAdapter = ArrayAdapter(this, R.layout.item, R.id.name, al)
+        val flingContainer = findViewById<View>(R.id.frame) as SwipeFlingAdapterView
+        flingContainer.adapter = arrayAdapter
+
+        flingContainer.setFlingListener(object : SwipeFlingAdapterView.onFlingListener {
+            override fun removeFirstObjectInAdapter() {
+                Log.d("LIST", "removed object!")
+                al.removeAt(0)
+                arrayAdapter.notifyDataSetChanged()
+            }
+
+            override fun onLeftCardExit(dataObject: Any) {
+                Toast.makeText(this@swap_activity, "Left", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onRightCardExit(dataObject: Any) {
+                Toast.makeText(this@swap_activity, "Right", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onAdapterAboutToEmpty(itemsInAdapter: Int) {
+                al.add("XML ${i++}")
+                arrayAdapter.notifyDataSetChanged()
+                Log.d("LIST", "notified")
+            }
+
+            override fun onScroll(scrollProgressPercent: Float) {
+                val view = flingContainer.selectedView
+                view.findViewById<View>(R.id.item_swipe_right_indicator).alpha = if (scrollProgressPercent < 0) -scrollProgressPercent else 0f
+                view.findViewById<View>(R.id.item_swipe_left_indicator).alpha = if (scrollProgressPercent > 0) scrollProgressPercent else 0f
+            }
+        });
+    }
+
+
+    // code for database
+    /*protected lateinit var cards_data: Array<cards>
     private var arrayAdapter: arrayAdapter? = null
     private val i = 0
     private lateinit var auth: FirebaseAuth
@@ -189,4 +245,5 @@ class swap_activity : AppCompatActivity(){
         */
 
     }
+    */
 }
