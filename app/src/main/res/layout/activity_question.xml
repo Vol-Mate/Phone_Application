@@ -27,7 +27,7 @@
         android:layout_height="48dp"
         android:ems="10"
         android:inputType="textCapSentences|textMultiLine"
-        android:text="Enter answer here..."
+        android:text="Enter your answer here..."
         android:background="#F7DCC0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,4 +46,15 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/img_0577" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#D1B495"
+        android:text="Next"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/questionInput" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -43,6 +43,7 @@ class swap_activity : AppCompatActivity(){
         al.add("ann")
         al.add("justin")
 
+
         arrayAdapter = ArrayAdapter(this, R.layout.item, R.id.name, al)
         val flingContainer = findViewById<View>(R.id.frame) as SwipeFlingAdapterView
         flingContainer.adapter = arrayAdapter

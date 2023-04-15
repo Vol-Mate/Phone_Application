@@ -28,4 +28,6 @@ class main_menu : AppCompatActivity(){
             startActivity(intent)
         }
     }
+
+
 }

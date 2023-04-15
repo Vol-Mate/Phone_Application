@@ -23,7 +23,7 @@ data class User(
     val name: String = "",
     val email: String = "",
     val sex: String = "",
-    val age: Int = 0,
+    val agge: Int = 0,
     val gender: String = "",
     val genderPref: String = ""
 ) {
@@ -102,7 +102,7 @@ class MainActivity : AppCompatActivity() {
                     name = name,
                     email = email,
                     sex = "",
-                    age = 0,
+                    agge = 0,
                     gender = gender,
                     genderPref = ""
                 )
