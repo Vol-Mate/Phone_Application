@@ -22,10 +22,11 @@ data class User(
     val userId: String = "",
     val name: String = "",
     val email: String = "",
-    val sex: String = "",
-    val agge: Int = 0,
+    // val sex: String = "",
+    val age: Int = 0,
     val gender: String = "",
-    val genderPref: String = ""
+    val genderPref: String = "",
+    val answer: String = ""
 ) {
     // add other methods as needed
 }
@@ -78,7 +79,7 @@ class MainActivity : AppCompatActivity() {
         if (task.isSuccessful) {
             val account: GoogleSignInAccount? = task.result
             if (account != null) {
-                updateUI(account)
+                updateUI(account, gender = "", age = 0, genderPref = "", answer = "")
             }
 
         } else {
@@ -86,30 +87,36 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateUI(account: GoogleSignInAccount) {
+    private fun updateUI(account: GoogleSignInAccount, gender: String, age: Int, genderPref: String, answer: String) {
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
         auth.signInWithCredential(credential).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val userId = auth.currentUser?.uid ?: ""
                 val name = account.displayName ?: ""
                 val email = account.email ?: ""
-                val gender = "" // replace this with the user's selected gender
-                val age = 0 // replace this with the user's selected age
 
-                // Add the user to the Firebase Realtime Database
+                // Create a User object with the collected data
                 val user = User(
                     userId = userId,
                     name = name,
                     email = email,
-                    sex = "",
-                    agge = 0,
                     gender = gender,
-                    genderPref = ""
+                    age = age,
+                    genderPref = genderPref,
+                    answer = answer
                 )
 
-                usersRef.child(userId).setValue(user).addOnCompleteListener { task ->
+                // Update the user's age, gender, and gender preference in the Firebase Realtime Database
+                usersRef.child(userId).updateChildren(
+                    mapOf(
+                        "age" to age,
+                        "gender" to gender,
+                        "genderPref" to genderPref,
+                        "answer" to answer
+                    )
+                ).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        Toast.makeText(this, "User added to database", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "User updated in database", Toast.LENGTH_SHORT).show()
                         setupUserListener()
                     } else {
                         Toast.makeText(this, task.exception.toString(), Toast.LENGTH_SHORT).show()
@@ -150,13 +157,3 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 }
-//
-//   // connects to next page
-//    private fun setButton() {
-//        button = findViewById<Button>(R.id.button)
-//        button.setOnClickListener {
-//            val intent = Intent(this, MainActivity2::class.java)
-//            startActivity(intent)
-//
-//        }
-//    }
