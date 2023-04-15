@@ -17,7 +17,8 @@
 
         <activity
             android:name="com.example.phoneapplication.main_menu"/>
-
+        <activity
+            android:name=".question_activity" />
         <activity
             android:name=".MainActivity2"
             android:exported="false" />

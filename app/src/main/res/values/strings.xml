@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Phone Application</string>
+    <string-array name="gender_options">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Other</item>
+    </string-array>
+    <string name="gender_prompt">Select your gender</string>
+    <string name="preferred_gender_prompt">Select your preferred gender:</string>
+
 </resources>
