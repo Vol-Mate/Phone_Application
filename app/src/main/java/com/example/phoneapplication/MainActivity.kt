@@ -54,6 +54,7 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         googleSignInClient = GoogleSignIn.getClient(this, gso)
+        googleSignInClient.signOut()
 
         findViewById<Button>(R.id.gSignInBtn).setOnClickListener {
             signInGoogle()
