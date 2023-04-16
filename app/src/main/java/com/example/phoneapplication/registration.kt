@@ -72,7 +72,7 @@ class registration : AppCompatActivity() {
         findViewById<Button>(R.id.gSignInBtn).setOnClickListener {
             signInGoogle()
         }
-      //  setButton()
+        //setButton()
     }
    /*private fun setButton(){
         var button = findViewById<Button>(R.id.gSignInBtn)

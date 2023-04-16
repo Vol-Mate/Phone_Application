@@ -60,7 +60,7 @@ class login : AppCompatActivity() {
         findViewById<Button>(R.id.gSignInBtn).setOnClickListener {
             signInGoogle()
         }
-       // setButton()
+        //setButton()
     }
     private fun signInGoogle() {
         val signInIntent = googleSignInClient.signInIntent
@@ -74,13 +74,13 @@ class login : AppCompatActivity() {
                 handleResults(task)
             }
         }
-    private fun setButton(){
+    /*private fun setButton(){
         var button = findViewById<Button>(R.id.gSignInBtn)
         button.setOnClickListener {
             val intent = Intent(this, main_menu::class.java)
             startActivity(intent)
         }
-    }
+    }*/
 
     private fun handleResults(task: Task<GoogleSignInAccount>) {
         if (task.isSuccessful) {
@@ -157,7 +157,7 @@ class login : AppCompatActivity() {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             handleResults(task)
         }
-        val intent = Intent(this, question_activity::class.java)
+        val intent = Intent(this, main_menu::class.java)
         startActivity(intent)
     }
 }
