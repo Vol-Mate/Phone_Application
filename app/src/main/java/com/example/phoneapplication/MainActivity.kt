@@ -21,144 +21,31 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.auth.User
 
-data class User(
-    val userId: String = "",
-    val name: String = "",
-    val email: String = "",
-    val age: Int = 0,
-    val gender: String = "",
-    val genderPref: String = "",
-    val answer: String = ""
-) {
-    // add other methods as needed
-}
+
 class MainActivity : AppCompatActivity() {
-    val database = Firebase.database.reference
-    val usersRef = database.child("users")
-    companion object {
-        private const val RC_SIGN_IN = 9001
-    }
-
-    private lateinit var auth: FirebaseAuth
-    private lateinit var googleSignInClient: GoogleSignInClient
-    private lateinit var ageEditText: EditText
-    private lateinit var genderEditText: Spinner
-    private lateinit var genderPrefEditText: Spinner
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Get references to EditText views
-        ageEditText = findViewById(R.id.ageEditText)
-        genderEditText = findViewById(R.id.genderSpinner)
-        genderPrefEditText = findViewById(R.id.preferredGenderSpinner)
-
-
-        auth = FirebaseAuth.getInstance()
-
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
-
-        googleSignInClient = GoogleSignIn.getClient(this, gso)
-        googleSignInClient.signOut()
-
-        findViewById<Button>(R.id.gSignInBtn).setOnClickListener {
-            signInGoogle()
-        }
+        setButton()
+        setButton2()
     }
 
-
-    private fun signInGoogle() {
-        val signInIntent = googleSignInClient.signInIntent
-        launcher.launch(signInIntent)
-    }
-
-    private val launcher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-                handleResults(task)
-            }
-        }
-    private fun handleResults(task: Task<GoogleSignInAccount>) {
-        if (task.isSuccessful) {
-            val account: GoogleSignInAccount? = task.result
-            if (account != null) {
-                // Get values from EditText views
-                val gender = genderEditText.selectedItem.toString()
-                val age = ageEditText.text.toString().toIntOrNull() ?: 0
-                val genderPref = genderPrefEditText.selectedItem.toString()
-
-                // val answer = answerEditText.text.toString()
-
-                val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-                auth.signInWithCredential(credential).addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val userId = auth.currentUser?.uid ?: ""
-                        val name = account.displayName ?: ""
-                        val email = account.email ?: ""
-
-                        // Create a User object with the collected data
-                        val user = User(
-                            userId = userId,
-                            name = name,
-                            email = email,
-                            gender = gender,
-                            age = age,
-                            genderPref = genderPref
-                            //  answer = answer
-                        )
-
-                        // Update the user's data in the Firebase Realtime Database
-                        usersRef.child(userId).setValue(user).addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                Toast.makeText(this, "User updated in database", Toast.LENGTH_SHORT).show()
-                                setupUserListener()
-                            } else {
-                                Toast.makeText(this, task.exception.toString(), Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                    }
-                }
-            }
-
-        } else {
-            Toast.makeText(this, task.exception.toString(), Toast.LENGTH_SHORT).show()
+    private fun setButton() {
+        var button = findViewById<Button>(R.id.button3)
+        button.setOnClickListener {
+            val intent = Intent(this, registration::class.java)
+            startActivity(intent)
         }
     }
-
-    private fun setupUserListener() {
-        val userId = auth.currentUser?.uid
-        if (userId != null) {
-            val userRef = usersRef.child(userId)
-            userRef.addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val user = snapshot.getValue(User::class.java)
-                    if (user != null) {
-                        // Do something with the user data
-                    }
-                }
-                override fun onCancelled(error: DatabaseError) {
-                    // Handle error
-                }
-            })
+    private fun setButton2() {
+        var button = findViewById<Button>(R.id.button2)
+        button.setOnClickListener {
+            val intent = Intent(this, login::class.java)
+            startActivity(intent)
         }
     }
-
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == Companion.RC_SIGN_IN) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            handleResults(task)
-        }
-        val intent = Intent(this, main_menu::class.java)
-        startActivity(intent)
-    }
-
 }
+
+
