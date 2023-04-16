@@ -74,7 +74,7 @@ class registration : AppCompatActivity() {
         }
       //  setButton()
     }
-  /* private fun setButton(){
+   /*private fun setButton(){
         var button = findViewById<Button>(R.id.gSignInBtn)
         button.setOnClickListener {
             val intent = Intent(this, question_activity::class.java)

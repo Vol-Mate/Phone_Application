@@ -32,15 +32,16 @@ data class User1(
 }
 
 class login : AppCompatActivity() {
-    private lateinit var auth: FirebaseAuth
-    private lateinit var googleSignInClient: GoogleSignInClient
+    val database = Firebase.database.reference
+    val usersRef = database.child("users")
 
     companion object {
         const val RC_SIGN_IN = 9001
     }
 
-    val database = Firebase.database.reference
-    val usersRef = database.child("users")
+    private lateinit var auth: FirebaseAuth
+    private lateinit var googleSignInClient: GoogleSignInClient
+
     
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,21 +60,13 @@ class login : AppCompatActivity() {
         findViewById<Button>(R.id.gSignInBtn).setOnClickListener {
             signInGoogle()
         }
-        setButton()
+       // setButton()
     }
-
     private fun signInGoogle() {
         val signInIntent = googleSignInClient.signInIntent
         launcher.launch(signInIntent)
     }
 
-    private fun setButton(){
-        var button = findViewById<Button>(R.id.gSignInBtn)
-        button.setOnClickListener {
-            val intent = Intent(this, main_menu::class.java)
-            startActivity(intent)
-        }
-    }
     private val launcher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -81,6 +74,14 @@ class login : AppCompatActivity() {
                 handleResults(task)
             }
         }
+    private fun setButton(){
+        var button = findViewById<Button>(R.id.gSignInBtn)
+        button.setOnClickListener {
+            val intent = Intent(this, main_menu::class.java)
+            startActivity(intent)
+        }
+    }
+
     private fun handleResults(task: Task<GoogleSignInAccount>) {
         if (task.isSuccessful) {
             val account: GoogleSignInAccount? = task.result
@@ -119,7 +120,7 @@ class login : AppCompatActivity() {
                     }
                 }
             } else {
-                Toast.makeText(this, "Failed to authenticate with Google", Toast.LENGTH_SHORT)
+                Toast.makeText(this, task.exception.toString(), Toast.LENGTH_SHORT)
                     .show()
             }
         }
