@@ -39,7 +39,7 @@ open class swap_activity : AppCompatActivity(){
         setContentView(R.layout.activity_swap)
         usersDb = FirebaseDatabase.getInstance().reference.child("users")
         auth = FirebaseAuth.getInstance()
-        currentUId = auth!!.currentUser!!.uid
+        currentUId = auth.currentUser?.uid
         checkUserSex()
         rowItems = ArrayList<cards>()
         arrayAdapter = arrayAdapter(this, R.layout.item, rowItems as ArrayList<cards>)
@@ -48,8 +48,8 @@ open class swap_activity : AppCompatActivity(){
         flingContainer.setFlingListener(object : onFlingListener {
             override fun removeFirstObjectInAdapter() {
                 Log.d("LIST", "removed object!")
-                rowItems!!.removeAt(0)
-                arrayAdapter!!.notifyDataSetChanged()
+                (rowItems as ArrayList<cards>).removeAt(0)
+                arrayAdapter?.notifyDataSetChanged()
             }
 
             fun DatabaseReference.childSafe(child: String): DatabaseReference? {
@@ -59,18 +59,22 @@ open class swap_activity : AppCompatActivity(){
             override fun onLeftCardExit(dataObject: Any) {
                 val obj: cards = dataObject as cards
                 val userId: String? = obj.userId
-                usersDb!!.child(userId.toString()).child("connections").child("nope")
-                    .child(currentUId!!)
-                    .setValue(true)
+                userId?.let {
+                    usersDb?.child(it)?.child("connections")?.child("nope")
+                        ?.child(currentUId!!)
+                        ?.setValue(true)
+                }
                 Toast.makeText(this@swap_activity, "Left", Toast.LENGTH_SHORT).show()
             }
 
             override fun onRightCardExit(dataObject: Any) {
                 val obj: cards = dataObject as cards
                 val userId: String? = obj.getUserId()
-                usersDb!!.child(userId.toString()).child("connections").child("yeps")
-                    .child(currentUId!!)
-                    .setValue(true)
+                userId?.let {
+                    usersDb?.child(it)?.child("connections")?.child("yeps")
+                        ?.child(currentUId!!)
+                        ?.setValue(true)
+                }
                 isConnectionMatch(userId.toString())
                 Toast.makeText(this@swap_activity, "Right", Toast.LENGTH_SHORT).show()
             }
@@ -84,16 +88,16 @@ open class swap_activity : AppCompatActivity(){
         private var oppositeUserSex: String? = null
 
         private fun isConnectionMatch(userId: String) {
-            val currentUserConnectionsDb = usersDb!!.child(currentUId!!).child("connections").child("yeps").child(userId)
-            currentUserConnectionsDb.addListenerForSingleValueEvent(object : ValueEventListener {
+            val currentUserConnectionsDb = usersDb?.child(currentUId!!)?.child("connections")?.child("yeps")?.child(userId)
+            currentUserConnectionsDb?.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     if (dataSnapshot.exists()) {
                         Toast.makeText(this@swap_activity, "new Connection", Toast.LENGTH_LONG).show()
 
                         val key = FirebaseDatabase.getInstance().reference.child("Chat").push().key
 
-                        usersDb!!.child(dataSnapshot.key!!).child("connections").child("matches").child(currentUId!!).child("ChatId").setValue(key)
-                        usersDb!!.child(currentUId!!).child("connections").child("matches").child(dataSnapshot.key!!).child("ChatId").setValue(key)
+                        usersDb?.child(dataSnapshot.key!!)?.child("connections")?.child("matches")?.child(currentUId!!)?.child("ChatId")?.setValue(key)
+                        usersDb?.child(currentUId!!)?.child("connections")?.child("matches")?.child(dataSnapshot.key!!)?.child("ChatId")?.setValue(key)
                     }
                 }
 
@@ -104,8 +108,8 @@ open class swap_activity : AppCompatActivity(){
 
         private fun checkUserSex() {
             val user = FirebaseAuth.getInstance().currentUser
-            val userDb = usersDb!!.child(user?.uid ?: "")
-            userDb.addListenerForSingleValueEvent(object : ValueEventListener {
+            val userDb = usersDb?.child(user?.uid ?: "")
+            userDb?.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     if (dataSnapshot.exists()) {
                         if (dataSnapshot.child("sex").getValue() != null) {
@@ -126,19 +130,19 @@ open class swap_activity : AppCompatActivity(){
         }
 
         private fun getOppositeSexUsers() {
-            usersDb!!.addChildEventListener(object : ChildEventListener {
+            usersDb?.addChildEventListener(object : ChildEventListener {
                 override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
                     if (dataSnapshot.child("sex").getValue() != null) {
                         if (dataSnapshot.exists() && !dataSnapshot.child("connections").child("nope").hasChild(currentUId!!) && !dataSnapshot.child("connections").child("yeps").hasChild(
                                 currentUId!!
                             ) && dataSnapshot.child("sex").getValue().toString() == oppositeUserSex) {
-                            var profileImageUrl = "default"
-                            if (!dataSnapshot.child("profileImageUrl").getValue()!!.equals("default")) {
-                                profileImageUrl = dataSnapshot.child("profileImageUrl").getValue().toString()
+                            var answer = "default"
+                            if (!dataSnapshot.child("answer").getValue()?.equals("default")!!) {
+                                answer = dataSnapshot.child("answer").getValue().toString()
                             }
-                            val item = cards(dataSnapshot.key!!, dataSnapshot.child("name").getValue().toString(), profileImageUrl)
+                            val item = cards(dataSnapshot.key, dataSnapshot.child("name").getValue().toString(), answer)
                             (rowItems as ArrayList<cards>).add(item)
-                            arrayAdapter!!.notifyDataSetChanged()
+                            arrayAdapter?.notifyDataSetChanged()
                         }
                     }
                 }
