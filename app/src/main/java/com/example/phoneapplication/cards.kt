@@ -2,7 +2,7 @@ package com.example.phoneapplication
 
 import androidx.appcompat.app.AppCompatActivity
 
-class cards(internal var userId: String?, internal var name: String?, internal var profileImageUrl: String?) {
+class cards(internal var userId: String?, internal var name: String?, internal var answer: String?) {
     fun getUserId(): String? {
         return userId
     }
@@ -19,13 +19,10 @@ class cards(internal var userId: String?, internal var name: String?, internal v
         this.name = name
     }
 
-    fun getProfileImageUrl(): String? {
-        return profileImageUrl
+    fun getAnswer(): String? {
+        return answer
     }
 
-    fun setProfileImageUrl(profileImageUrl: String?) {
-        this.profileImageUrl = profileImageUrl
-    }
 }
 
 

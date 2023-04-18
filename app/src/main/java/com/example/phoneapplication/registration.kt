@@ -15,6 +15,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.tasks.Task
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.*
@@ -51,6 +52,7 @@ class registration : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        FirebaseApp.initializeApp(this)
         setContentView(R.layout.activity_registration)
 
         // Get references to EditText views
@@ -107,8 +109,8 @@ class registration : AppCompatActivity() {
                 // val answer = answerEditText.text.toString()
 
                 val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-                auth.signInWithCredential(credential).addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
+                auth.signInWithCredential(credential).addOnCompleteListener { authTask ->
+                    if (authTask.isSuccessful) {
                         val userId = auth.currentUser?.uid ?: ""
                         val name = account.displayName ?: ""
                         val email = account.email ?: ""
@@ -126,9 +128,9 @@ class registration : AppCompatActivity() {
 
 
                         // Update the user's data in the Firebase Realtime Database
-
-                        usersRef.child(userId).setValue(user2).addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
+                        val userRef = usersRef.child(userId)
+                        usersRef.child(userId).setValue(user2).addOnCompleteListener { dbTask ->
+                            if (dbTask.isSuccessful) {
                                 Toast.makeText(this, "User updated in database", Toast.LENGTH_SHORT).show()
                                 setupUserListener()
                             } else {

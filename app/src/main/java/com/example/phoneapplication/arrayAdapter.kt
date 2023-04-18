@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 
@@ -22,17 +21,10 @@ class arrayAdapter(context: Context, resourceId: Int, items: List<cards>) :
         }
 
         val name = view?.findViewById<TextView>(R.id.name)
-        val image = view?.findViewById<ImageView>(R.id.image)
+        val answer = view?.findViewById<TextView>(R.id.answer)
 
         name?.text = card_item?.name
-
-        when (card_item?.profileImageUrl) {
-            "default" -> Glide.with(context).load(R.mipmap.ic_launcher).into(image!!)
-            else -> {
-                Glide.with(context).clear(image!!)
-                Glide.with(context).load(card_item?.profileImageUrl).into(image!!)
-            }
-        }
+        answer?.text = card_item?.answer
 
         return view!!
     }
