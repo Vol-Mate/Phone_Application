@@ -22,13 +22,16 @@ import com.google.firebase.firestore.auth.User
 import com.google.firebase.ktx.Firebase
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import androidx.annotation.Keep
 
-data class User1(
+@Keep
+ class User1(
     val userId: String = "",
     val name: String = "",
     val email: String = "",
 ) {
-    // add other methods as needed
+    constructor() : this("", "", "")
+
 }
 
 class login : AppCompatActivity() {

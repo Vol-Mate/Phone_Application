@@ -9,6 +9,7 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.Keep
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -19,21 +20,22 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.*
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.database.ktx.database
-import com.google.firebase.firestore.auth.User
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.ktx.Firebase
 
-data class User2(
+
+@Keep
+class Users(
     val userId: String = "",
     val name: String = "",
     val email: String = "",
     val age: Int = 0,
     val gender: String = "",
-    val genderPref: String = "",
-    val answer: String= "",
-    //  val answer: String = ""
+    val genderPref: String = ""
 ) {
     // add other methods as needed
+    constructor() : this("", "", "", 0,"", "")
 }
 class registration : AppCompatActivity() {
     val database = Firebase.database.reference
@@ -55,13 +57,11 @@ class registration : AppCompatActivity() {
         FirebaseApp.initializeApp(this)
         setContentView(R.layout.activity_registration)
 
-        // Get references to EditText views
+        auth = FirebaseAuth.getInstance()
+        //        // Get references to EditText views
         ageEditText = findViewById(R.id.ageEditText)
         genderEditText = findViewById(R.id.genderSpinner)
         genderPrefEditText = findViewById(R.id.preferredGenderSpinner)
-
-
-        auth = FirebaseAuth.getInstance()
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -74,16 +74,15 @@ class registration : AppCompatActivity() {
         findViewById<Button>(R.id.gSignInBtn).setOnClickListener {
             signInGoogle()
         }
-        //setButton()
+        setButton()
     }
-   /*private fun setButton(){
+   private fun setButton(){
         var button = findViewById<Button>(R.id.gSignInBtn)
         button.setOnClickListener {
             val intent = Intent(this, question_activity::class.java)
             startActivity(intent)
         }
-    }*/
-
+    }
 
     private fun signInGoogle() {
         val signInIntent = googleSignInClient.signInIntent
@@ -106,8 +105,6 @@ class registration : AppCompatActivity() {
                 val age = ageEditText.text.toString().toIntOrNull() ?: 0
                 val genderPref = genderPrefEditText.selectedItem.toString()
 
-                // val answer = answerEditText.text.toString()
-
                 val credential = GoogleAuthProvider.getCredential(account.idToken, null)
                 auth.signInWithCredential(credential).addOnCompleteListener { authTask ->
                     if (authTask.isSuccessful) {
@@ -116,14 +113,13 @@ class registration : AppCompatActivity() {
                         val email = account.email ?: ""
 
                         val answer = ""
-                        val user2 = User2 (
-                             userId=userId,
-                           name=name,
+                        val user2 = Users (
+                            userId=userId,
+                            name=name,
                             email=email,
-                          age=age,
+                            age=age,
                             gender=gender,
-                           genderPref=genderPref,
-                            answer=answer
+                            genderPref=genderPref,
                         )
 
 
@@ -152,7 +148,7 @@ class registration : AppCompatActivity() {
             val userRef = usersRef.child(userId)
             userRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    val user = snapshot.getValue(User::class.java)
+                    val user = snapshot.getValue(Users::class.java)
                     if (user != null) {
                         // Do something with the user data
                     }
@@ -172,7 +168,7 @@ class registration : AppCompatActivity() {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             handleResults(task)
         }
-        val intent = Intent(this, question_activity::class.java)
+        val intent = Intent(this, main_menu::class.java)
         startActivity(intent)
     }
 
