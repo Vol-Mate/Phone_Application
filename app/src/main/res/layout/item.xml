@@ -6,10 +6,12 @@
     android:layout_height="500dp">
 
 
-    <ImageView
+    <TextView
         android:id="@+id/answer"
         android:layout_width="match_parent"
-        android:layout_height="460dp"
+        android:layout_height="384dp"
+        android:background="#FAB650"
+        android:gravity="center"
         android:scaleType="centerCrop" />
 
     <TextView

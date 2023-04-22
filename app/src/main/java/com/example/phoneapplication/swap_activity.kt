@@ -24,12 +24,12 @@ import com.example.phoneapplication.arrayAdapter;
 import com.example.phoneapplication.cards;
 
 open class swap_activity : AppCompatActivity(){
-    protected lateinit var cards_data: Array<cards>
-    private var arrayAdapter: arrayAdapter? = null
-    private val i = 0
-    private lateinit var auth: FirebaseAuth
-    private var currentUId: String? = null
-    private var usersDb: DatabaseReference? = null
+    lateinit var cards_data: Array<cards>
+    var arrayAdapter: arrayAdapter? = null
+    val i = 0
+    lateinit var auth: FirebaseAuth
+    var currentUId: String? = null
+    var usersDb: DatabaseReference? = null
 
     var listView: ListView? = null
     var rowItems: MutableList<cards>? = null
@@ -75,7 +75,7 @@ open class swap_activity : AppCompatActivity(){
                         ?.child(currentUId!!)
                         ?.setValue(true)
                 }
-                isConnectionMatch(userId.toString())
+                //isConnectionMatch(userId.toString())
                 Toast.makeText(this@swap_activity, "Right", Toast.LENGTH_SHORT).show()
             }
 
@@ -86,25 +86,6 @@ open class swap_activity : AppCompatActivity(){
 
         private var userSex: String? = null
         private var oppositeUserSex: String? = null
-
-        private fun isConnectionMatch(userId: String) {
-            val currentUserConnectionsDb = usersDb?.child(currentUId!!)?.child("connections")?.child("yeps")?.child(userId)
-            currentUserConnectionsDb?.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        Toast.makeText(this@swap_activity, "new Connection", Toast.LENGTH_LONG).show()
-
-                        val key = FirebaseDatabase.getInstance().reference.child("Chat").push().key
-
-                        usersDb?.child(dataSnapshot.key!!)?.child("connections")?.child("matches")?.child(currentUId!!)?.child("ChatId")?.setValue(key)
-                        usersDb?.child(currentUId!!)?.child("connections")?.child("matches")?.child(dataSnapshot.key!!)?.child("ChatId")?.setValue(key)
-                    }
-                }
-
-                override fun onCancelled(databaseError: DatabaseError) {
-                }
-            })
-        }
 
         private fun checkUserSex() {
             val user = FirebaseAuth.getInstance().currentUser
@@ -140,8 +121,8 @@ open class swap_activity : AppCompatActivity(){
                             if (!dataSnapshot.child("answer").getValue()?.equals("default")!!) {
                                 answer = dataSnapshot.child("answer").getValue().toString()
                             }
-                            val item = cards(dataSnapshot.key, dataSnapshot.child("name").getValue().toString(), answer)
-                            (rowItems as ArrayList<cards>).add(item)
+                            val item = dataSnapshot.key?.let { cards(it, dataSnapshot.child("name").getValue().toString(), answer) }
+                            item?.let { (rowItems as ArrayList<cards>).add(it) }
                             arrayAdapter?.notifyDataSetChanged()
                         }
                     }
@@ -163,5 +144,24 @@ open class swap_activity : AppCompatActivity(){
 
                 }
             })
+
+            /*private fun isConnectionMatch(userId: String) {
+            val currentUserConnectionsDb = usersDb?.child(currentUId!!)?.child("connections")?.child("yeps")?.child(userId)
+            currentUserConnectionsDb?.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        Toast.makeText(this@swap_activity, "new Connection", Toast.LENGTH_LONG).show()
+
+                        val key = FirebaseDatabase.getInstance().reference.child("Chat").push().key
+
+                        usersDb?.child(dataSnapshot.key!!)?.child("connections")?.child("matches")?.child(currentUId!!)?.child("ChatId")?.setValue(key)
+                        usersDb?.child(currentUId!!)?.child("connections")?.child("matches")?.child(dataSnapshot.key!!)?.child("ChatId")?.setValue(key)
+                    }
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                }
+            })
+        }*/
         }
     }
