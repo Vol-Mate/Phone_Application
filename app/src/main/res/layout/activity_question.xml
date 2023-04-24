@@ -9,6 +9,7 @@
         android:id="@+id/textView3"
         android:layout_width="289dp"
         android:layout_height="200dp"
+        android:layout_marginTop="15dp"
         android:background="#6BFF9800"
         android:padding="10dp"
         android:text="What hobbies or activities do you enjoy in your free time? How do you prioritize and make time for them in your daily life?"
@@ -23,10 +24,11 @@
 
     <EditText
         android:id="@+id/questionInput"
-        android:layout_width="374dp"
-        android:layout_height="48dp"
+        android:layout_width="379dp"
+        android:layout_height="246dp"
         android:background="#F7DCC0"
         android:ems="10"
+        android:gravity="top|left"
         android:hint="Enter your answer here..."
         android:inputType="textCapSentences|textMultiLine"
         app:layout_constraintBottom_toBottomOf="parent"

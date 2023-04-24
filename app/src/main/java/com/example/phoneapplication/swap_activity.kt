@@ -27,10 +27,12 @@ class User3(
     val email: String = "",
     val age: Int = 0,
     val gender: String = "",
-    val genderPref: String = ""
+    val genderPref: String = "",
+    var answer: String= ""
 ) {
+
     // add other methods as needed
-    constructor() : this("", "", "", 0,"", "")
+    constructor() : this("", "", "", 0,"", "","")
 }
 
 open class swap_activity : AppCompatActivity(){
@@ -99,6 +101,8 @@ open class swap_activity : AppCompatActivity(){
     private lateinit var userSex: String
     private lateinit var oppositeUserSex: String
 
+    // isConnectionMatch() function would go here
+
     private fun checkUserSex() {
         val user = FirebaseAuth.getInstance().currentUser
         val userRef = usersRef.child(user?.uid ?: "")
@@ -129,7 +133,7 @@ open class swap_activity : AppCompatActivity(){
                 if (user != null && user.gender == oppositeUserSex && dataSnapshot.key != userId) {
                     if (!dataSnapshot.child("connections").child("nope").hasChild(userId.toString())
                         && !dataSnapshot.child("connections").child("yeps").hasChild(userId.toString())) {
-                        val item = cards(dataSnapshot.key ?: "", user.name, "default")
+                        val item = cards(dataSnapshot.key ?: "", user.name, user.age, user.answer)
                         rowItems.add(item)
                         arrayAdapter.notifyDataSetChanged()
                     }

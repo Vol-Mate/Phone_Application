@@ -24,19 +24,29 @@
         android:background="#6BFF9800"
         android:gravity="center"
         android:scaleType="centerCrop"
-        android:textSize="35sp"
+        android:textSize="30sp"
         android:textColor="@android:color/black"
         tools:text="answer"/>
 
         <TextView
             android:id="@+id/name"
-            android:layout_width="match_parent"
+            android:layout_width="175dp"
             android:layout_height="500dp"
-            android:gravity="bottom|left"
             android:padding="10sp"
+            android:gravity="bottom|left"
             android:textColor="@android:color/black"
             android:textSize="40sp"
             tools:text="name" />
+
+        <TextView
+            android:id="@+id/age"
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            android:gravity="bottom|center"
+            android:padding="10sp"
+            android:textColor="@android:color/black"
+            android:textSize="40sp"
+            tools:text="age" />
 
         <View
         android:id="@+id/item_swipe_left_indicator"
