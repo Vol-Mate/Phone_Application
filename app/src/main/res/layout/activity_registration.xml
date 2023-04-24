@@ -30,6 +30,7 @@
         android:layout_marginTop="64dp"
         android:entries="@array/gender_options"
         android:minHeight="48dp"
+        android:background="#F7DCC0"
         android:prompt="@string/gender_prompt"
         app:layout_constraintBottom_toTopOf="@id/preferredGenderSpinner"
         app:layout_constraintEnd_toEndOf="parent"
@@ -44,6 +45,7 @@
         android:layout_marginTop="64dp"
         android:entries="@array/gender_options"
         android:minHeight="48dp"
+        android:background="#F7DCC0"
         android:prompt="@string/preferred_gender_prompt"
         app:layout_constraintBottom_toTopOf="@id/gSignInBtn"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,5 +64,45 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/preferredGenderSpinner" />
+
+    <TextView
+        android:id="@+id/textGender"
+        android:layout_width="380dp"
+        android:layout_height="36dp"
+        android:text="Please select your gender: "
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/genderSpinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.516"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ageEditText"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/textPrefered"
+        android:layout_width="380dp"
+        android:layout_height="36dp"
+        android:text="Please select your prefered gender to date: "
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/preferredGenderSpinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.516"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/genderSpinner"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/textAge"
+        android:layout_width="380dp"
+        android:layout_height="36dp"
+        android:text="Please enter your age: "
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/ageEditText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.516"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
