@@ -24,7 +24,7 @@ class arrayAdapter<T>(context: Context?, resourceId: Int, items: List<cards>?) :
         val age = convertView!!.findViewById<View>(R.id.age) as TextView
         name.text = card_item!!.getName()
         //answer.text = card_item!!.getAnswer()
-        age.text = card_item!!.getAge().toString()
+        age.text = card_item!!.getAge()
         return convertView
     }
 }

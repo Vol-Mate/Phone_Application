@@ -29,7 +29,7 @@ class MainActivity2 : AppCompatActivity() {
        // findViewById<TextView>(R.id.textView2).text = "$email\n$displayName"
 
         findViewById<Button>(R.id.gSignOutBtn).setOnClickListener{
-            val age = findViewById<EditText>(R.id.ageEditText).text.toString().toIntOrNull()
+            val age = findViewById<Spinner>(R.id.ageEditText).selectedItem.toString()
             val sex = findViewById<Spinner>(R.id.genderSpinner).selectedItem.toString()
             val genderPref = findViewById<Spinner>(R.id.preferredGenderSpinner).selectedItem.toString()
 
