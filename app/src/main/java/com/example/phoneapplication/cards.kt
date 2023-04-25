@@ -6,10 +6,10 @@ import androidx.annotation.Keep
 class cards(
     internal var userId: String = "",
     internal var name: String = "",
-    internal var age: String = 0,
+    internal var age: String = "",
     internal var answer: String= ""
 ) {
-    constructor() : this("", "", 0, "")
+    constructor() : this("", "", "", "")
 
     fun getUserId(): String {
         return userId
@@ -35,11 +35,11 @@ class cards(
         this.answer = answer
     }
 
-    fun getAge(): Int {
+    fun getAge(): String {
         return age
     }
 
-    fun setAge(age: Int) {
+    fun setAge(age: String) {
         this.age = age
     }
 }
