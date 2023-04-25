@@ -19,12 +19,12 @@ import com.google.firebase.ktx.Firebase
 class User5(
     internal var userId: String = "",
     internal var name: String = "",
-    internal var age: String = "",
+    internal var age: Int = 0,
     internal var answer: String= "",
     internal var gender: String = "",
     internal var genderPref: String = ""
 ) {
-    constructor() : this("", "", "","","","")
+    constructor() : this("", "", 0,"","","")
 
     fun getUserId(): String {
         return userId
@@ -50,11 +50,11 @@ class User5(
         this.answer = answer
     }
 
-    fun getAge(): String {
+    fun getAge(): Int {
         return age
     }
 
-    fun setAge(age: String) {
+    fun setAge(age: Int) {
         this.age = age
     }
 }
@@ -77,12 +77,13 @@ open class swap_activity : AppCompatActivity(){
         val database = Firebase.database("https://phone-application-14522-default-rtdb.firebaseio.com/")
         userRef = database.getReference("users")
 
+        //val database2 = Firebase.database("https://phone-application-14522.firebaseio.com/")
+        //val userRef2 = Firebase.database.reference("users")
+
         mAuth = FirebaseAuth.getInstance()
         val userId = mAuth.currentUser?.uid
 
         if (userId != null) {
-            //val database = Firebase.database("https://phone-application-14522.firebaseio.com/")
-            //val userRef = Firebase.database.reference("users")
             checkUserSex()
 
             rowItems = ArrayList()
@@ -162,7 +163,7 @@ open class swap_activity : AppCompatActivity(){
                 if (user != null && user.gender == oppositeUserSex && dataSnapshot.key != userId) {
                     if (!dataSnapshot.child("connections").child("nope").hasChild(userId.toString())
                         && !dataSnapshot.child("connections").child("yeps").hasChild(userId.toString())) {
-                        val item = cards(dataSnapshot.key ?: "", user.name, user.age) // user.answer
+                        val item = cards(dataSnapshot.key ?: "", user.name, user.age.toString()) // user.answer
                         rowItems.add(item)
                         arrayAdapter.notifyDataSetChanged()
                     }

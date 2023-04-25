@@ -7,39 +7,39 @@
     android:layout_height="match_parent"
     tools:context=".registration">
 
-<!--    <EditText-->
-<!--        android:id="@+id/ageEditText"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginHorizontal="16dp"-->
-<!--        android:layout_marginTop="64dp"-->
-<!--        android:layout_marginBottom="8dp"-->
-<!--        android:background="#F7DCC0"-->
-<!--        android:hint="Age"-->
-<!--        android:inputType="number"-->
-<!--        android:padding="16dp"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/genderSpinner"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
-
-    <Spinner
+    <EditText
         android:id="@+id/ageEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="64dp"
         android:layout_marginBottom="8dp"
         android:background="#F7DCC0"
-        android:entries="@array/age_options"
-        android:minHeight="48dp"
-        android:prompt="@string/preferred_age"
-        android:spinnerMode="dropdown"
-        app:layout_constraintBottom_toTopOf="@id/gSignInBtn"
+        android:hint="Age"
+        android:inputType="number"
+        android:padding="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/genderSpinner"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.095" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+<!--    <Spinner-->
+<!--        android:id="@+id/ageEditText"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginHorizontal="16dp"-->
+<!--        android:layout_marginBottom="8dp"-->
+<!--        android:background="#F7DCC0"-->
+<!--        android:entries="@array/age_options"-->
+<!--        android:minHeight="48dp"-->
+<!--        android:prompt="@string/preferred_age"-->
+<!--        android:spinnerMode="dropdown"-->
+<!--        app:layout_constraintBottom_toTopOf="@id/gSignInBtn"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.0"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.095" />-->
 
     <Spinner
         android:id="@+id/genderSpinner"

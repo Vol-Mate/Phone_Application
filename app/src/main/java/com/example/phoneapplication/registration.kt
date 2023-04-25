@@ -30,12 +30,12 @@ class Users(
     val userId: String = "",
     val name: String = "",
     val email: String = "",
-    val age: String = "",
+    val age: Int = 0,
     val gender: String = "",
     val genderPref: String = ""
 ) {
     // add other methods as needed
-    constructor() : this("", "", "", "","", "")
+    constructor() : this("", "", "", 0,"", "")
 }
 class registration : AppCompatActivity() {
     val database = Firebase.database.reference
@@ -46,7 +46,7 @@ class registration : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
-    private lateinit var ageEditText: Spinner
+    private lateinit var ageEditText: EditText
     private lateinit var genderEditText: Spinner
     private lateinit var genderPrefEditText: Spinner
 
@@ -102,7 +102,7 @@ class registration : AppCompatActivity() {
             if (account != null) {
                 // Get values from EditText views
                 val gender = genderEditText.selectedItem.toString()
-                val age = ageEditText.selectedItem.toString()
+                val age = ageEditText.text.toString().toIntOrNull() ?: 0
                 val genderPref = genderPrefEditText.selectedItem.toString()
 
                 val credential = GoogleAuthProvider.getCredential(account.idToken, null)
