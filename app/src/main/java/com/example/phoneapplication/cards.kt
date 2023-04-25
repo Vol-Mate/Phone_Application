@@ -1,13 +1,12 @@
 package com.example.phoneapplication
 
 import androidx.annotation.Keep
-import androidx.appcompat.app.AppCompatActivity
 
 @Keep
 class cards(
     internal var userId: String = "",
     internal var name: String = "",
-    internal var age: Int = 0,
+    internal var age: String = 0,
     internal var answer: String= ""
 ) {
     constructor() : this("", "", 0, "")

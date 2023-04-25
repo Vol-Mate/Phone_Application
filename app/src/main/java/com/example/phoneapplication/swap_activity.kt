@@ -3,7 +3,6 @@ package com.example.phoneapplication
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
 import androidx.annotation.Keep
@@ -12,11 +11,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.lorentzos.flingswipe.SwipeFlingAdapterView
 import com.lorentzos.flingswipe.SwipeFlingAdapterView.onFlingListener
-import com.example.phoneapplication.arrayAdapter
-import com.example.phoneapplication.cards
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
@@ -24,12 +19,12 @@ import com.google.firebase.ktx.Firebase
 class User5(
     internal var userId: String = "",
     internal var name: String = "",
-    internal var age: Int = 0,
+    internal var age: String = "",
     internal var answer: String= "",
     internal var gender: String = "",
     internal var genderPref: String = ""
 ) {
-    constructor() : this("", "", 0,"","","")
+    constructor() : this("", "", "","","","")
 
     fun getUserId(): String {
         return userId
@@ -55,19 +50,20 @@ class User5(
         this.answer = answer
     }
 
-    fun getAge(): Int {
+    fun getAge(): String {
         return age
     }
 
-    fun setAge(age: Int) {
+    fun setAge(age: String) {
         this.age = age
     }
 }
 
 open class swap_activity : AppCompatActivity(){
     private lateinit var userRef: DatabaseReference
+    private lateinit var userRef2: DatabaseReference
     private lateinit var cards: Array<cards>
-    private lateinit var arrayAdapter: arrayAdapter
+    private lateinit var arrayAdapter: arrayAdapter<cards>
     private var i: Int = 0
     private lateinit var mAuth: FirebaseAuth
     private lateinit var listView: ListView
@@ -78,7 +74,8 @@ open class swap_activity : AppCompatActivity(){
         setContentView(R.layout.activity_swap)
 
         //val userRef = FirebaseDatabase.getInstance().reference.child("users");
-        val userRef = Firebase.database.getReference("users")
+        val database = Firebase.database("https://phone-application-14522-default-rtdb.firebaseio.com/")
+        userRef = database.getReference("users")
 
         mAuth = FirebaseAuth.getInstance()
         val userId = mAuth.currentUser?.uid
@@ -86,7 +83,7 @@ open class swap_activity : AppCompatActivity(){
         if (userId != null) {
             //val database = Firebase.database("https://phone-application-14522.firebaseio.com/")
             //val userRef = Firebase.database.reference("users")
-            //checkUserSex()
+            checkUserSex()
 
             rowItems = ArrayList()
 
@@ -103,7 +100,7 @@ open class swap_activity : AppCompatActivity(){
                 }
 
                 override fun onLeftCardExit(dataObject: Any) {
-                    val obj = dataObject as User5
+                    val obj = dataObject as cards
                     val user = obj.getUserId()
                     userRef.child(userId).child("connections").child("nope").child(user)
                         .setValue(true)
@@ -111,7 +108,7 @@ open class swap_activity : AppCompatActivity(){
                 }
 
                 override fun onRightCardExit(dataObject: Any) {
-                    val obj = dataObject as User5
+                    val obj = dataObject as cards
                     val user = obj.getUserId()
                     userRef.child(userId).child("connections").child("yeps").child(user)
                         .setValue(true)

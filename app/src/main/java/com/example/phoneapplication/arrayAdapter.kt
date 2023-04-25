@@ -9,7 +9,7 @@ import android.widget.TextView
 import com.example.phoneapplication.cards
 import androidx.annotation.Keep
 
-class arrayAdapter(context: Context?, resourceId: Int, items: List<cards>?) :
+class arrayAdapter<T>(context: Context?, resourceId: Int, items: List<cards>?) :
     ArrayAdapter<cards>(context!!, resourceId, items!!) {
     //var context: Context? = null
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
