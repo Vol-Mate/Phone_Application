@@ -21,23 +21,51 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 @Keep
-class User3(
-    val userId: String = "",
-    val name: String = "",
-    val email: String = "",
-    val age: Int = 0,
-    val gender: String = "",
-    val genderPref: String = "",
-    var answer: String= ""
+class User5(
+    internal var userId: String = "",
+    internal var name: String = "",
+    internal var age: Int = 0,
+    internal var answer: String= "",
+    internal var gender: String = "",
+    internal var genderPref: String = ""
 ) {
+    constructor() : this("", "", 0,"","","")
 
-    // add other methods as needed
-    constructor() : this("", "", "", 0,"", "","")
+    fun getUserId(): String {
+        return userId
+    }
+
+    fun setUserId(userId: String) {
+        this.userId = userId
+    }
+
+    fun getName(): String {
+        return name
+    }
+
+    fun setName(name: String) {
+        this.name = name
+    }
+
+    fun getAnswer(): String {
+        return answer
+    }
+
+    fun setAnswer(answer: String) {
+        this.answer = answer
+    }
+
+    fun getAge(): Int {
+        return age
+    }
+
+    fun setAge(age: Int) {
+        this.age = age
+    }
 }
 
 open class swap_activity : AppCompatActivity(){
-    val database = Firebase.database("https://phone-application-14522.firebaseio.com/")
-    val usersRef = database.getReference("users")
+    private lateinit var userRef: DatabaseReference
     private lateinit var cards: Array<cards>
     private lateinit var arrayAdapter: arrayAdapter
     private var i: Int = 0
@@ -49,11 +77,15 @@ open class swap_activity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_swap)
 
+        //val userRef = FirebaseDatabase.getInstance().reference.child("users");
+        val userRef = Firebase.database.getReference("users")
+
         mAuth = FirebaseAuth.getInstance()
         val userId = mAuth.currentUser?.uid
 
         if (userId != null) {
-            val userRef = usersRef.child(userId)
+            //val database = Firebase.database("https://phone-application-14522.firebaseio.com/")
+            //val userRef = Firebase.database.reference("users")
             //checkUserSex()
 
             rowItems = ArrayList()
@@ -71,7 +103,7 @@ open class swap_activity : AppCompatActivity(){
                 }
 
                 override fun onLeftCardExit(dataObject: Any) {
-                    val obj = dataObject as cards
+                    val obj = dataObject as User5
                     val user = obj.getUserId()
                     userRef.child(userId).child("connections").child("nope").child(user)
                         .setValue(true)
@@ -79,7 +111,7 @@ open class swap_activity : AppCompatActivity(){
                 }
 
                 override fun onRightCardExit(dataObject: Any) {
-                    val obj = dataObject as cards
+                    val obj = dataObject as User5
                     val user = obj.getUserId()
                     userRef.child(userId).child("connections").child("yeps").child(user)
                         .setValue(true)
@@ -105,11 +137,11 @@ open class swap_activity : AppCompatActivity(){
 
     private fun checkUserSex() {
         val user = FirebaseAuth.getInstance().currentUser
-        val userRef = usersRef.child(user?.uid ?: "")
+        val userRef = userRef.child(user?.uid ?: "")
         userRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    val user = dataSnapshot.getValue(User3::class.java)
+                    val user = dataSnapshot.getValue(User5::class.java)
                     user?.let {
                         userSex = user.gender
                         oppositeUserSex = user.genderPref
@@ -127,13 +159,13 @@ open class swap_activity : AppCompatActivity(){
     private fun getOppositeSexUsers() {
         mAuth = FirebaseAuth.getInstance()
         val userId = mAuth.currentUser?.uid
-        usersRef.addChildEventListener(object : ChildEventListener {
+        userRef.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
-                val user = dataSnapshot.getValue(User3::class.java)
+                val user = dataSnapshot.getValue(User5::class.java)
                 if (user != null && user.gender == oppositeUserSex && dataSnapshot.key != userId) {
                     if (!dataSnapshot.child("connections").child("nope").hasChild(userId.toString())
                         && !dataSnapshot.child("connections").child("yeps").hasChild(userId.toString())) {
-                        val item = cards(dataSnapshot.key ?: "", user.name, user.age, user.answer)
+                        val item = cards(dataSnapshot.key ?: "", user.name, user.age) // user.answer
                         rowItems.add(item)
                         arrayAdapter.notifyDataSetChanged()
                     }
