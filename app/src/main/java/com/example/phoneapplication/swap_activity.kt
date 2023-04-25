@@ -77,8 +77,8 @@ open class swap_activity : AppCompatActivity(){
         val database = Firebase.database("https://phone-application-14522-default-rtdb.firebaseio.com/")
         userRef = database.getReference("users")
 
-        //val database2 = Firebase.database("https://phone-application-14522.firebaseio.com/")
-        //val userRef2 = Firebase.database.reference("users")
+        val database2 = Firebase.database("https://phone-application-14522.firebaseio.com/")
+        val userRef2 = database.getReference("users")
 
         mAuth = FirebaseAuth.getInstance()
         val userId = mAuth.currentUser?.uid
