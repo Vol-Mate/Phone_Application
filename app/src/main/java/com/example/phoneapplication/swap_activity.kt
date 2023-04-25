@@ -78,7 +78,7 @@ open class swap_activity : AppCompatActivity(){
         userRef = database.getReference("users")
 
         val database2 = Firebase.database("https://phone-application-14522.firebaseio.com/")
-        val userRef2 = database2.getReference("users")
+        userRef2 = database2.getReference("users")
 
         mAuth = FirebaseAuth.getInstance()
         val userId = mAuth.currentUser?.uid
@@ -105,6 +105,8 @@ open class swap_activity : AppCompatActivity(){
                     val user = obj.getUserId()
                     userRef.child(userId).child("connections").child("nope").child(user)
                         .setValue(true)
+                    userRef2.child(userId).child("connections").child("nope").child(user)
+                        .setValue(true)
                     Toast.makeText(this@swap_activity, "Left", Toast.LENGTH_SHORT).show()
                 }
 
@@ -112,6 +114,8 @@ open class swap_activity : AppCompatActivity(){
                     val obj = dataObject as cards
                     val user = obj.getUserId()
                     userRef.child(userId).child("connections").child("yeps").child(user)
+                        .setValue(true)
+                    userRef2.child(userId).child("connections").child("yeps").child(user)
                         .setValue(true)
                     //isConnectionMatch(userId)
                     Toast.makeText(this@swap_activity, "Right", Toast.LENGTH_SHORT).show()
