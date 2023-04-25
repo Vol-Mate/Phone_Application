@@ -1,8 +1,16 @@
 package com.example.phoneapplication
 
-import androidx.appcompat.app.AppCompatActivity
+import androidx.annotation.Keep
 
-class cards(internal var userId: String, internal var name: String, internal var answer: String) {
+@Keep
+class cards(
+    internal var userId: String = "",
+    internal var name: String = "",
+    internal var age: String = "",
+    internal var answer: String= ""
+) {
+    constructor() : this("", "", "", "")
+
     fun getUserId(): String {
         return userId
     }
@@ -23,7 +31,19 @@ class cards(internal var userId: String, internal var name: String, internal var
         return answer
     }
 
+    fun setAnswer(answer: String) {
+        this.answer = answer
+    }
+
+    fun getAge(): String {
+        return age
+    }
+
+    fun setAge(age: String) {
+        this.age = age
+    }
 }
+
 
 
 

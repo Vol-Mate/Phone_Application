@@ -3,7 +3,6 @@ package com.example.phoneapplication
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
 import androidx.annotation.Keep
@@ -12,32 +11,59 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.lorentzos.flingswipe.SwipeFlingAdapterView
 import com.lorentzos.flingswipe.SwipeFlingAdapterView.onFlingListener
-import com.example.phoneapplication.arrayAdapter
-import com.example.phoneapplication.cards
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 @Keep
-class User3(
-    val userId: String = "",
-    val name: String = "",
-    val email: String = "",
-    val age: Int = 0,
-    val gender: String = "",
-    val genderPref: String = ""
+class User5(
+    internal var userId: String = "",
+    internal var name: String = "",
+    internal var age: String = "",
+    internal var answer: String= "",
+    internal var gender: String = "",
+    internal var genderPref: String = ""
 ) {
-    // add other methods as needed
-    constructor() : this("", "", "", 0,"", "")
+    constructor() : this("", "", "","","","")
+
+    fun getUserId(): String {
+        return userId
+    }
+
+    fun setUserId(userId: String) {
+        this.userId = userId
+    }
+
+    fun getName(): String {
+        return name
+    }
+
+    fun setName(name: String) {
+        this.name = name
+    }
+
+    fun getAnswer(): String {
+        return answer
+    }
+
+    fun setAnswer(answer: String) {
+        this.answer = answer
+    }
+
+    fun getAge(): String {
+        return age
+    }
+
+    fun setAge(age: String) {
+        this.age = age
+    }
 }
 
 open class swap_activity : AppCompatActivity(){
-    val database = Firebase.database("https://phone-application-14522.firebaseio.com/")
-    val usersRef = database.getReference("users")
+    private lateinit var userRef: DatabaseReference
+    private lateinit var userRef2: DatabaseReference
     private lateinit var cards: Array<cards>
-    private lateinit var arrayAdapter: arrayAdapter
+    private lateinit var arrayAdapter: arrayAdapter<cards>
     private var i: Int = 0
     private lateinit var mAuth: FirebaseAuth
     private lateinit var listView: ListView
@@ -47,12 +73,17 @@ open class swap_activity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_swap)
 
+        //val userRef = FirebaseDatabase.getInstance().reference.child("users");
+        val database = Firebase.database("https://phone-application-14522-default-rtdb.firebaseio.com/")
+        userRef = database.getReference("users")
+
         mAuth = FirebaseAuth.getInstance()
         val userId = mAuth.currentUser?.uid
 
         if (userId != null) {
-            val userRef = usersRef.child(userId)
-            //checkUserSex()
+            //val database = Firebase.database("https://phone-application-14522.firebaseio.com/")
+            //val userRef = Firebase.database.reference("users")
+            checkUserSex()
 
             rowItems = ArrayList()
 
@@ -99,13 +130,15 @@ open class swap_activity : AppCompatActivity(){
     private lateinit var userSex: String
     private lateinit var oppositeUserSex: String
 
+    // isConnectionMatch() function would go here
+
     private fun checkUserSex() {
         val user = FirebaseAuth.getInstance().currentUser
-        val userRef = usersRef.child(user?.uid ?: "")
+        val userRef = userRef.child(user?.uid ?: "")
         userRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    val user = dataSnapshot.getValue(User3::class.java)
+                    val user = dataSnapshot.getValue(User5::class.java)
                     user?.let {
                         userSex = user.gender
                         oppositeUserSex = user.genderPref
@@ -123,13 +156,13 @@ open class swap_activity : AppCompatActivity(){
     private fun getOppositeSexUsers() {
         mAuth = FirebaseAuth.getInstance()
         val userId = mAuth.currentUser?.uid
-        usersRef.addChildEventListener(object : ChildEventListener {
+        userRef.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
-                val user = dataSnapshot.getValue(User3::class.java)
+                val user = dataSnapshot.getValue(User5::class.java)
                 if (user != null && user.gender == oppositeUserSex && dataSnapshot.key != userId) {
                     if (!dataSnapshot.child("connections").child("nope").hasChild(userId.toString())
                         && !dataSnapshot.child("connections").child("yeps").hasChild(userId.toString())) {
-                        val item = cards(dataSnapshot.key ?: "", user.name, "default")
+                        val item = cards(dataSnapshot.key ?: "", user.name, user.age) // user.answer
                         rowItems.add(item)
                         arrayAdapter.notifyDataSetChanged()
                     }
