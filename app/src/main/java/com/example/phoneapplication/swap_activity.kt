@@ -78,7 +78,7 @@ open class swap_activity : AppCompatActivity(){
         userRef = database.getReference("users")
 
         val database2 = Firebase.database("https://phone-application-14522.firebaseio.com/")
-        val userRef2 = database.getReference("users")
+        val userRef2 = database2.getReference("users")
 
         mAuth = FirebaseAuth.getInstance()
         val userId = mAuth.currentUser?.uid
@@ -163,7 +163,7 @@ open class swap_activity : AppCompatActivity(){
                 if (user != null && user.gender == oppositeUserSex && dataSnapshot.key != userId) {
                     if (!dataSnapshot.child("connections").child("nope").hasChild(userId.toString())
                         && !dataSnapshot.child("connections").child("yeps").hasChild(userId.toString())) {
-                        val item = cards(dataSnapshot.key ?: "", user.name, user.age.toString()) // user.answer
+                        val item = cards(dataSnapshot.key ?: "", user.name, user.age.toString(),user.answer)
                         rowItems.add(item)
                         arrayAdapter.notifyDataSetChanged()
                     }

@@ -38,6 +38,7 @@ class Users(
     constructor() : this("", "", "", 0,"", "")
 }
 class registration : AppCompatActivity() {
+    // val database = Firebase.database("https://phone-application-14522-default-rtdb.firebaseio.com/")
     val database = Firebase.database.reference
     val usersRef = database.child("users")
     companion object {
@@ -57,11 +58,13 @@ class registration : AppCompatActivity() {
         FirebaseApp.initializeApp(this)
         setContentView(R.layout.activity_registration)
 
-        auth = FirebaseAuth.getInstance()
+
         //        // Get references to EditText views
         ageEditText = findViewById(R.id.ageEditText)
         genderEditText = findViewById(R.id.genderSpinner)
         genderPrefEditText = findViewById(R.id.preferredGenderSpinner)
+
+        auth = FirebaseAuth.getInstance()
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -74,15 +77,15 @@ class registration : AppCompatActivity() {
         findViewById<Button>(R.id.gSignInBtn).setOnClickListener {
             signInGoogle()
         }
-        setButton()
+        //setButton()
     }
-   private fun setButton(){
-        var button = findViewById<Button>(R.id.gSignInBtn)
-        button.setOnClickListener {
-            val intent = Intent(this, question_activity::class.java)
-            startActivity(intent)
-        }
-    }
+//   private fun setButton(){
+//        var button = findViewById<Button>(R.id.gSignInBtn)
+//        button.setOnClickListener {
+//            val intent = Intent(this, question_activity::class.java)
+//            startActivity(intent)
+//        }
+//    }
 
     private fun signInGoogle() {
         val signInIntent = googleSignInClient.signInIntent
@@ -124,7 +127,7 @@ class registration : AppCompatActivity() {
 
 
                         // Update the user's data in the Firebase Realtime Database
-                        val userRef = usersRef.child(userId)
+                        // val userRef = usersRef.child(userId)
                         usersRef.child(userId).setValue(user2).addOnCompleteListener { dbTask ->
                             if (dbTask.isSuccessful) {
                                 Toast.makeText(this, "User updated in database", Toast.LENGTH_SHORT).show()
