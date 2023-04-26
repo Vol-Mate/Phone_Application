@@ -31,14 +31,16 @@ class Users(
     val name: String = "",
     val email: String = "",
     val age: Int = 0,
+    val answer: String="",
     val gender: String = "",
     val genderPref: String = ""
 ) {
     // add other methods as needed
-    constructor() : this("", "", "", 0,"", "")
+    constructor() : this("", "", "", 0,"","", "")
 }
 class registration : AppCompatActivity() {
     // val database = Firebase.database("https://phone-application-14522-default-rtdb.firebaseio.com/")
+    // check is we have access to the users node
     val database = Firebase.database.reference
     val usersRef = database.child("users")
     companion object {
