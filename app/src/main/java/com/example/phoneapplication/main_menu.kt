@@ -1,9 +1,10 @@
 package com.example.phoneapplication
-
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+//import android.util.Log
 
 class main_menu : AppCompatActivity(){
     private lateinit var button: Button
@@ -13,6 +14,7 @@ class main_menu : AppCompatActivity(){
         setContentView(R.layout.main_menu)
         setButton()
         setButton2()
+        //Log.i(TAG, "Hello World")
 }
     private fun setButton(){
         button = findViewById<Button>(R.id.MatchButton)

@@ -1,12 +1,15 @@
 package com.example.phoneapplication
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.ListView
 import android.widget.Toast
 import androidx.annotation.Keep
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.lorentzos.flingswipe.SwipeFlingAdapterView
@@ -69,9 +72,20 @@ open class swap_activity : AppCompatActivity(){
     private lateinit var listView: ListView
     private lateinit var rowItems: MutableList<cards>
 
+    private lateinit var button: Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_swap)
+        setButton()
+
+        /*private fun setButton() {
+            button = findViewById<Button>(R.id.button4)
+            button.setOnClickListener {
+                val intent = Intent(this@swap_activity, activity_match::class.java)
+                startActivity(intent)
+            }
+        }*/
 
         //val userRef = FirebaseDatabase.getInstance().reference.child("users");
         val database = Firebase.database("https://phone-application-14522-default-rtdb.firebaseio.com/")
@@ -104,9 +118,9 @@ open class swap_activity : AppCompatActivity(){
                     val obj = dataObject as cards
                     val user = obj.getUserId()
                     userRef.child(userId).child("connections").child("nope").child(user)
-                        .setValue(true)
+                        .setValue(false)
                     userRef2.child(userId).child("connections").child("nope").child(user)
-                        .setValue(true)
+                        .setValue(false)
                     Toast.makeText(this@swap_activity, "Left", Toast.LENGTH_SHORT).show()
                 }
 
@@ -129,6 +143,14 @@ open class swap_activity : AppCompatActivity(){
             flingContainer.setOnItemClickListener { _, _, _, _ ->
                 Toast.makeText(this@swap_activity, "Item Clicked", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    private fun setButton() {
+        button = findViewById<Button>(R.id.button4)
+        button.setOnClickListener {
+            val intent = Intent(this@swap_activity, activity_match::class.java)
+            startActivity(intent)
         }
     }
 
@@ -183,5 +205,7 @@ open class swap_activity : AppCompatActivity(){
             override fun onCancelled(databaseError: DatabaseError) {}
         })
     }
+
+
 }
 
