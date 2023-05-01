@@ -39,14 +39,16 @@ class activity_match : AppCompatActivity() {
     // private fun nameOfFunc(){
     //   code
     // }
-    private fun match(){
+    private fun match() {
         // acts like a vector
         val matchList = mutableListOf<String>()
 
         // get a reference of the database
         lateinit var userRef: DatabaseReference
         lateinit var myRef: DatabaseReference
-        val database = Firebase.database("https://phone-application-14522-default-rtdb.firebaseio.com")
+        lateinit var refToDate: DatabaseReference
+        val database =
+            Firebase.database("https://phone-application-14522-default-rtdb.firebaseio.com")
         //val refDatabase = database.getReference("dateThisWeek")
 
         // get this user specifically
@@ -66,16 +68,68 @@ class activity_match : AppCompatActivity() {
 
             // get to all of the matches in the database under the user
             userRef = database.getReference("users").child(myId).child("connections")
-            myRef= database.getReference("users").child(myId).child("dateThisWeek")//.child("dateThisWeek")
-        }
+            myRef = database.getReference("users").child(myId)
+                .child("dateThisWeek")//.child("dateThisWeek")
 
-       // userRef = database.getReference(myId)/*.child("connections").child("yeps")*//*.child(userId!!).child("connections"). child("yeps")*/
 
-        // go through this user's matches header
-            //userRef.addListenerForSingleValueEvent()
-        // got this online
 
-        userRef.addChildEventListener(object : ChildEventListener {
+            userRef.addChildEventListener(object : ChildEventListener {
+                // loop inspired by https://stackoverflow.com/questions/50372353/iterate-through-firebase-database-using-kotlin
+                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                    // only do the following if the user has "" for "dateThisWeek"
+                    //println(snapshot.value.toString())
+                   // if (snapshot.getValue(String::class.java).toString() == "") {
+                        for (childSnapshot in snapshot.children) {
+                            //val childValue = childSnapshot.getValue(String::class.java)
+                            // Do something with the child value
+                            //val name = childSnapshot.child("connections").child("yeps").value
+                            if (childSnapshot.value == true) {
+                                //Log.i(TAG, childSnapshot.key.toString())
+                                matchList.add(childSnapshot.key.toString())
+                            }
+                        }
+                        //Log.i(TAG, matchList)
+                        // randomize matchList and pick one
+                        matchList.shuffle()
+                        if (matchList.isNotEmpty()) {
+                            println(matchList.first())
+                            //myRef.setValue(matchList.first())
+                            //val myDateThisWeek = mapOf("dateThisWeek" to matchList.first())
+                            myRef.setValue(matchList.first())
+                            // set date's date to this person too
+                            refToDate = database.getReference("users").child(matchList.first())
+                            refToDate.child("dateThisWeek").setValue(myId)
+                        }
+                    }
+                //}
+
+                override fun onChildChanged(
+                    snapshot: DataSnapshot,
+                    previousChildName: String?
+                ) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onChildRemoved(snapshot: DataSnapshot) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+
+
+                // userRef = database.getReference(myId)/*.child("connections").child("yeps")*//*.child(userId!!).child("connections"). child("yeps")*/
+
+                // go through this user's matches header
+                //userRef.addListenerForSingleValueEvent()
+                // got this online
+
+                /*       userRef.addChildEventListener(object : ChildEventListener {
         // loop inspired by https://stackoverflow.com/questions/50372353/iterate-through-firebase-database-using-kotlin
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
             for (childSnapshot in snapshot.children) {
@@ -95,24 +149,18 @@ class activity_match : AppCompatActivity() {
                 //myRef.setValue(matchList.first())
                 //val myDateThisWeek = mapOf("dateThisWeek" to matchList.first())
                 myRef.setValue(matchList.first())
-            }
+                refToDate.getReference("users").child(matchList.first()).child("dateThisWeek").setValue()
+            }*/
 
 
-            // need to figure out how not to give each person more than 1 date a week and both
-            // people are alerted abt the date they have w one another!!
+                // need to figure out how not to give each person more than 1 date a week and both
+                // people are alerted abt the date they have w one another!!
 
-            // can make the button a "click here when finished swiping" button and it says wait to be matched
-            // or something and does all this and then could we insert it as a node under that person
-            // then show notif every week and deletes the node of the person they were dating that week
+                // can make the button a "click here when finished swiping" button and it says wait to be matched
+                // or something and does all this and then could we insert it as a node under that person
+                // then show notif every week and deletes the node of the person they were dating that week
+
+            })
         }
-
-            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) { }
-
-            override fun onChildRemoved(snapshot: DataSnapshot) { }
-
-            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) { }
-
-            override fun onCancelled(error: DatabaseError) { }
-        })
     }
 }

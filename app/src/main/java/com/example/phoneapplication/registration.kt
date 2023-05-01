@@ -33,7 +33,8 @@ class Users(
     val age: Int = 0,
     val answer: String="",
     val gender: String = "",
-    val genderPref: String = ""
+    val genderPref: String = "",
+    val dateThisWeek: String = ""
 ) {
     // add other methods as needed
     constructor() : this("", "", "", 0,"","", "")
@@ -154,6 +155,8 @@ class registration : AppCompatActivity() {
                                         .setValue(gender)
                                     refToUser/*.child("permanentData")*/.child("genderPref")
                                         .setValue(genderPref)
+                                    refToUser.child("dateThisWeek")
+                                        .setValue("")
                                 }
                             }
 
