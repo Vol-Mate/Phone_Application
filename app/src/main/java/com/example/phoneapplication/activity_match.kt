@@ -16,7 +16,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DatabaseError
 
-
+// everytime you click this button, it gives you a new date under "dateThisWeek"
 class myUser(
     internal var userId: String = "",
 ){}
@@ -46,7 +46,7 @@ class activity_match : AppCompatActivity() {
         // get a reference of the database
         lateinit var userRef: DatabaseReference
         lateinit var myRef: DatabaseReference
-        val database = Firebase.database("https://phone-application-14522.firebaseio.com/")
+        val database = Firebase.database("https://phone-application-14522-default-rtdb.firebaseio.com")
         //val refDatabase = database.getReference("dateThisWeek")
 
         // get this user specifically

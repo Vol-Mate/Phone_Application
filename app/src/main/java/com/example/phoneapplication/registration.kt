@@ -149,10 +149,10 @@ class registration : AppCompatActivity() {
                                     refToUser.child("userID").setValue(userId)
                                     refToUser.child("name").setValue(name)
                                     refToUser.child("email").setValue(email)
-                                    refToUser.child("permanentData").child("age").setValue(age)
-                                    refToUser.child("permanentData").child("gender")
+                                    refToUser./*child("permanentData").*/child("age").setValue(age)
+                                    refToUser./*child("permanentData").*/child("gender")
                                         .setValue(gender)
-                                    refToUser.child("permanentData").child("genderPref")
+                                    refToUser/*.child("permanentData")*/.child("genderPref")
                                         .setValue(genderPref)
                                 }
                             }
