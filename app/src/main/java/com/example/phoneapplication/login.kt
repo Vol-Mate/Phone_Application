@@ -29,6 +29,7 @@ import androidx.annotation.Keep
     val userId: String = "",
     val name: String = "",
     val email: String = "",
+    val dateThisWeek: String = ""
 ) {
     constructor() : this("", "", "")
 

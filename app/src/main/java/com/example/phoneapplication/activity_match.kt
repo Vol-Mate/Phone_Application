@@ -21,9 +21,9 @@ class myUser(
     internal var userId: String = "",
 ){}
 
-data class myUser2(
+/*data class myUser2(
     var myDate: String = ""
-)
+)*/
 
 class activity_match : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,8 +45,9 @@ class activity_match : AppCompatActivity() {
 
         // get a reference of the database
         lateinit var userRef: DatabaseReference
+        lateinit var myRef: DatabaseReference
         val database = Firebase.database("https://phone-application-14522.firebaseio.com/")
-        val refDatabase = database.getReference("dateThisWeek")
+        //val refDatabase = database.getReference("dateThisWeek")
 
         // get this user specifically
         var mAuth: FirebaseAuth
@@ -61,9 +62,11 @@ class activity_match : AppCompatActivity() {
             // authenticate with your backend server, if you have one. Use
             // FirebaseUser.getIdToken() instead.
             val myId = it.uid
+            //val dateUID = it.
 
             // get to all of the matches in the database under the user
             userRef = database.getReference("users").child(myId).child("connections")
+            myRef= database.getReference("users").child(myId).child("dateThisWeek")//.child("dateThisWeek")
         }
 
        // userRef = database.getReference(myId)/*.child("connections").child("yeps")*//*.child(userId!!).child("connections"). child("yeps")*/
@@ -89,8 +92,11 @@ class activity_match : AppCompatActivity() {
             matchList.shuffle()
             if (matchList.isNotEmpty()) {
                 println(matchList.first())
-                refDatabase.setValue(matchList.first())
+                //myRef.setValue(matchList.first())
+                //val myDateThisWeek = mapOf("dateThisWeek" to matchList.first())
+                myRef.setValue(matchList.first())
             }
+
 
             // need to figure out how not to give each person more than 1 date a week and both
             // people are alerted abt the date they have w one another!!
@@ -98,25 +104,15 @@ class activity_match : AppCompatActivity() {
             // can make the button a "click here when finished swiping" button and it says wait to be matched
             // or something and does all this and then could we insert it as a node under that person
             // then show notif every week and deletes the node of the person they were dating that week
-
-
         }
 
-            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                TODO("Not yet implemented")
-            }
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) { }
 
-            override fun onChildRemoved(snapshot: DataSnapshot) {
-                TODO("Not yet implemented")
-            }
+            override fun onChildRemoved(snapshot: DataSnapshot) { }
 
-            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-                TODO("Not yet implemented")
-            }
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) { }
 
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
+            override fun onCancelled(error: DatabaseError) { }
         })
     }
 }
