@@ -118,34 +118,55 @@ class registration : AppCompatActivity() {
                         val email = account.email ?: ""
 
                         val answer = ""
-                        val user2 = Users (
-                            userId=userId,
-                            name=name,
-                            email=email,
-                            age=age,
-                            gender=gender,
-                            genderPref=genderPref,
+                        val user2 = Users(
+                            userId = userId,
+                            name = name,
+                            email = email,
+                            age = age,
+                            gender = gender,
+                            genderPref = genderPref,
                         )
 
 
                         // Update the user's data in the Firebase Realtime Database
                         // val userRef = usersRef.child(userId)
-                        usersRef.child(userId).setValue(user2).addOnCompleteListener { dbTask ->
+                        /* usersRef.child(userId).setValue(user2).addOnCompleteListener { dbTask ->
                             if (dbTask.isSuccessful) {
                                 Toast.makeText(this, "User updated in database", Toast.LENGTH_SHORT).show()
                                 setupUserListener()
                             } else {
                                 Toast.makeText(this, task.exception.toString(), Toast.LENGTH_SHORT).show()
                             }
-                        }
+                        }*/
+                        //val myRef = database.getReference
+
+                        val refToUser = database.child("users").child(userId)
+                        refToUser.addListenerForSingleValueEvent(object : ValueEventListener {
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                // only write to the database if there isn't already a node there for it
+                                if (!snapshot.exists()) {
+                                    println(userId)
+                                    refToUser.child("userID").setValue(userId)
+                                    refToUser.child("name").setValue(name)
+                                    refToUser.child("email").setValue(email)
+                                    refToUser.child("permanentData").child("age").setValue(age)
+                                    refToUser.child("permanentData").child("gender")
+                                        .setValue(gender)
+                                    refToUser.child("permanentData").child("genderPref")
+                                        .setValue(genderPref)
+                                }
+                            }
+
+                            override fun onCancelled(error: DatabaseError) {
+                            }
+                        })
                     }
+
                 }
             }
-
-        } else {
-            Toast.makeText(this, task.exception.toString(), Toast.LENGTH_SHORT).show()
         }
     }
+
 
     private fun setupUserListener() {
         val userId = auth.currentUser?.uid
@@ -176,6 +197,8 @@ class registration : AppCompatActivity() {
         val intent = Intent(this, main_menu::class.java)
         startActivity(intent)
     }
-
-}
+            }
+        //}
+    //}
+//}
 
