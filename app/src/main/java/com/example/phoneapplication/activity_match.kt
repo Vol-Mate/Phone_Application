@@ -7,14 +7,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 // told to do this from online
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.ChildEventListener
-import com.google.firebase.database.DatabaseError
 
 // everytime you click this button, it gives you a new date under "dateThisWeek"
 class myUser(
@@ -71,9 +68,78 @@ class activity_match : AppCompatActivity() {
             myRef = database.getReference("users").child(myId)
                 .child("dateThisWeek")//.child("dateThisWeek")
 
+            // use addListenerForSingleEvent to see if there is already a date there
+            // If there is, don't match, but if there isn't, match
+            myRef.addListenerForSingleValueEvent(object: ValueEventListener{
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val valueOfDate = dataSnapshot.getValue(String::class.java)
+                    if(valueOfDate == ""){
+                    userRef.addChildEventListener(object : ChildEventListener {
+                        // loop inspired by https://stackoverflow.com/questions/50372353/iterate-through-firebase-database-using-kotlin
+                        override fun onChildAdded(
+                            snapshot: DataSnapshot,
+                            previousChildName: String?
+                        ) {
+                            // only do the following if the user has "" for "dateThisWeek"
+                            //println(snapshot.value.toString())
+                            // if (snapshot.getValue(String::class.java).toString() == "") {
+                            for (childSnapshot in snapshot.children) {
+                                //val childValue = childSnapshot.getValue(String::class.java)
+                                // Do something with the child value
+                                //val name = childSnapshot.child("connections").child("yeps").value
+                                if (childSnapshot.value == true) {
+                                    //Log.i(TAG, childSnapshot.key.toString())
+                                    matchList.add(childSnapshot.key.toString())
+                                }
+                            }
+                            //Log.i(TAG, matchList)
+                            // randomize matchList and pick one
+                            matchList.shuffle()
+                            if (matchList.isNotEmpty()) {
+                                println(matchList.first())
+                                //myRef.setValue(matchList.first())
+                                //val myDateThisWeek = mapOf("dateThisWeek" to matchList.first())
+                                myRef.setValue(matchList.first())
+                                // set date's date to this person too
+                                refToDate = database.getReference("users").child(matchList.first())
+                                refToDate.child("dateThisWeek").setValue(myId)
+                            } else {
+                                myRef.setValue("None")
 
+                            }
+                        }
 
-            userRef.addChildEventListener(object : ChildEventListener {
+                        //}
+
+                        override fun onChildChanged(
+                            snapshot: DataSnapshot,
+                            previousChildName: String?
+                        ) {
+                            TODO("Not yet implemented")
+                        }
+
+                        override fun onChildRemoved(snapshot: DataSnapshot) {
+                            TODO("Not yet implemented")
+                        }
+
+                        override fun onChildMoved(
+                            snapshot: DataSnapshot,
+                            previousChildName: String?
+                        ) {
+                            TODO("Not yet implemented")
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                            TODO("Not yet implemented")
+                        }
+                    })
+                }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                }
+            })
+            /*userRef.addChildEventListener(object : ChildEventListener {
                 // loop inspired by https://stackoverflow.com/questions/50372353/iterate-through-firebase-database-using-kotlin
                 override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                     // only do the following if the user has "" for "dateThisWeek"
@@ -100,6 +166,10 @@ class activity_match : AppCompatActivity() {
                             refToDate = database.getReference("users").child(matchList.first())
                             refToDate.child("dateThisWeek").setValue(myId)
                         }
+                        else{
+                            myRef.setValue("None")
+
+                        }
                     }
                 //}
 
@@ -120,7 +190,7 @@ class activity_match : AppCompatActivity() {
 
                 override fun onCancelled(error: DatabaseError) {
                     TODO("Not yet implemented")
-                }
+                }*/
 
 
                 // userRef = database.getReference(myId)/*.child("connections").child("yeps")*//*.child(userId!!).child("connections"). child("yeps")*/
@@ -160,7 +230,7 @@ class activity_match : AppCompatActivity() {
                 // or something and does all this and then could we insert it as a node under that person
                 // then show notif every week and deletes the node of the person they were dating that week
 
-            })
+            //})
         }
     }
 }
