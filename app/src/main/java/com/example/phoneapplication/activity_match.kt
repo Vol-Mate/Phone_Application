@@ -74,42 +74,40 @@ class activity_match : AppCompatActivity() {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     val valueOfDate = dataSnapshot.getValue(String::class.java)
                     if(valueOfDate == ""){
-                    userRef.addChildEventListener(object : ChildEventListener {
-                        // loop inspired by https://stackoverflow.com/questions/50372353/iterate-through-firebase-database-using-kotlin
-                        override fun onChildAdded(
-                            snapshot: DataSnapshot,
-                            previousChildName: String?
-                        ) {
-                            // only do the following if the user has "" for "dateThisWeek"
-                            //println(snapshot.value.toString())
-                            // if (snapshot.getValue(String::class.java).toString() == "") {
-                            for (childSnapshot in snapshot.children) {
-                                //val childValue = childSnapshot.getValue(String::class.java)
-                                // Do something with the child value
-                                //val name = childSnapshot.child("connections").child("yeps").value
-                                if (childSnapshot.value == true) {
-                                    //Log.i(TAG, childSnapshot.key.toString())
-                                    matchList.add(childSnapshot.key.toString())
+                        userRef.addChildEventListener(object : ChildEventListener {
+                            // loop inspired by https://stackoverflow.com/questions/50372353/iterate-through-firebase-database-using-kotlin
+                            override fun onChildAdded(
+                                snapshot: DataSnapshot,
+                                previousChildName: String?
+                            ) {
+                                // only do the following if the user has "" for "dateThisWeek"
+                                //println(snapshot.value.toString())
+                                // if (snapshot.getValue(String::class.java).toString() == "") {
+                                for (childSnapshot in snapshot.children) {
+                                    //val childValue = childSnapshot.getValue(String::class.java)
+                                    // Do something with the child value
+                                    //val name = childSnapshot.child("connections").child("yeps").value
+                                    if (childSnapshot.value == true) {
+                                        //Log.i(TAG, childSnapshot.key.toString())
+                                        matchList.add(childSnapshot.key.toString())
+                                    }
+                                }
+                                //Log.i(TAG, matchList)
+                                // randomize matchList and pick one
+                                matchList.shuffle()
+                                if (matchList.isNotEmpty()) {
+                                    println(matchList.first())
+                                    //myRef.setValue(matchList.first())
+                                    //val myDateThisWeek = mapOf("dateThisWeek" to matchList.first())
+                                    myRef.setValue(matchList.first())
+                                    // set date's date to this person too
+                                    refToDate = database.getReference("users").child(matchList.first())
+                                    refToDate.child("dateThisWeek").setValue(myId)
+                                } else {
+                                    myRef.setValue("None")
+
                                 }
                             }
-                            //Log.i(TAG, matchList)
-                            // randomize matchList and pick one
-                            matchList.shuffle()
-                            if (matchList.isNotEmpty()) {
-                                println(matchList.first())
-                                //myRef.setValue(matchList.first())
-                                //val myDateThisWeek = mapOf("dateThisWeek" to matchList.first())
-                                myRef.setValue(matchList.first())
-                                // set date's date to this person too
-                                refToDate = database.getReference("users").child(matchList.first())
-                                refToDate.child("dateThisWeek").setValue(myId)
-                            } else {
-                                myRef.setValue("None")
-
-                            }
-                        }
-
-                        //}
 
                         override fun onChildChanged(
                             snapshot: DataSnapshot,
