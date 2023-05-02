@@ -79,20 +79,9 @@ open class swap_activity : AppCompatActivity(){
         setContentView(R.layout.activity_swap)
         setButton()
 
-        /*private fun setButton() {
-            button = findViewById<Button>(R.id.button4)
-            button.setOnClickListener {
-                val intent = Intent(this@swap_activity, activity_match::class.java)
-                startActivity(intent)
-            }
-        }*/
-
         //val userRef = FirebaseDatabase.getInstance().reference.child("users");
         val database = Firebase.database("https://phone-application-14522-default-rtdb.firebaseio.com/")
         userRef = database.getReference("users")
-
-        val database2 = Firebase.database("https://phone-application-14522.firebaseio.com/")
-        userRef2 = database2.getReference("users")
 
         mAuth = FirebaseAuth.getInstance()
         val userId = mAuth.currentUser?.uid
@@ -117,6 +106,8 @@ open class swap_activity : AppCompatActivity(){
                 override fun onLeftCardExit(dataObject: Any) {
                     val obj = dataObject as cards
                     val user = obj.getUserId()
+                    val database2 = Firebase.database("https://phone-application-14522.firebaseio.com/")
+                    userRef2 = database2.getReference("users")
                     userRef.child(userId).child("connections").child("nope").child(user)
                         .setValue(false)
                     userRef2.child(userId).child("connections").child("nope").child(user)
@@ -127,6 +118,8 @@ open class swap_activity : AppCompatActivity(){
                 override fun onRightCardExit(dataObject: Any) {
                     val obj = dataObject as cards
                     val user = obj.getUserId()
+                    val database2 = Firebase.database("https://phone-application-14522.firebaseio.com/")
+                    userRef2 = database2.getReference("users")
                     userRef.child(userId).child("connections").child("yeps").child(user)
                         .setValue(true)
                     userRef2.child(userId).child("connections").child("yeps").child(user)
@@ -145,8 +138,15 @@ open class swap_activity : AppCompatActivity(){
             }
         }
     }
-
     private fun setButton() {
+        button = findViewById<Button>(R.id.Back_Main)
+        button.setOnClickListener {
+            val intent = Intent(this@swap_activity, main_menu::class.java)
+            startActivity(intent)
+        }
+    }
+
+    private fun setButton2() {
         button = findViewById<Button>(R.id.button4)
         button.setOnClickListener {
             val intent = Intent(this@swap_activity, activity_match::class.java)

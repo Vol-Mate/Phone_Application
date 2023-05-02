@@ -16,10 +16,27 @@
         tools:layout_editor_absoluteY="-16dp" />
 
     <Button
+        android:id="@+id/Back_Main"
+        android:layout_width="175dp"
+        android:layout_height="58dp"
+        android:layout_marginStart="5dp"
+        android:background="#FAC093"
+        android:text="Main Menu"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/button4"
+        app:layout_constraintHorizontal_bias="0.198"
+        app:layout_constraintStart_toStartOf="@+id/frame"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.023" />
+
+    <Button
         android:id="@+id/button4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="175dp"
+        android:layout_height="58dp"
+        android:background="#FAC093"
         android:text="Click after swiping"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.922"
