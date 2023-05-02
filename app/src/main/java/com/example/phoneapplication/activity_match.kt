@@ -100,52 +100,82 @@ class activity_match : AppCompatActivity() {
                                 // randomize matchList and pick one
                                 matchList.shuffle()
                                 if (matchList.isNotEmpty()) {
+
                                     println(matchList.first())
-                                    //myRef.setValue(matchList.first())
-                                    //val myDateThisWeek = mapOf("dateThisWeek" to matchList.first())
-                                    myRef.setValue(matchList.first())
-                                    // set date's date to this person too
-                                    refToDate = database.getReference("users").child(matchList.first())
-                                    refToDate.child("dateThisWeek").setValue(myId)
+                                    //refToDate = database.getReference("users").child(matchList.first()).child("dateThisWeek")
 
-                                    // give them a place to meet
-                                    val locationList = /*mutableListOf<String>()*/ listOf("Bench in front of Ayres", "Engineering Courtyard",
-                                                               "HSS Lawn at table", "Min Kao 6th floor patio",
-                                                               "SU in front of Starbucks", "Starbucks in Hodges")
-                                    val dateLocation = locationList[(0..5).random()]
-                                    println("Date location: " + dateLocation)
-                                    refToLocation.setValue(dateLocation)
-                                    //same location for date
-                                    refToDateLocation = database.getReference("users").child(matchList.first())
-                                    refToDateLocation.child("dateLocation").setValue(dateLocation)
+                                    // do while matchList is not empty and the date has "" in its date location
+                                    // set date = matchList.first() and remove it
 
-                                } else {
-                                    myRef.setValue("None")
+                                    refToDate.addListenerForSingleValueEvent(object: ValueEventListener {
+                                        override fun onDataChange(myss: DataSnapshot) {
+                                            do {
+                                                while(myss.getValue(String::class.java) == null){
+                                                    wait()
+                                                }
 
-                                }
+                                                println("refToDate")
+                                                refToDate = database.getReference("users").child(matchList.first()).child("dateThisWeek")
+                                                //refToDate = database.getReference("users").child(matchList.first()).child("dateThisWeek")
+                                                println("while loop date: " + matchList.first())
+                                                myRef.setValue(matchList.first())
+                                                refToDate.setValue(myId)
+                                                matchList.remove(matchList.first())
+                                                println("removing it")
+
+                                                //myRef.setValue(matchList.first())
+                                                // set date's date to this person too
+                                                //refToDate = database.getReference("users").child(matchList.first())
+                                            } while(matchList.isNotEmpty() && myss.getValue(String::class.java) != "")
+
+                                                //refToDate/*.child("dateThisWeek")*/.setValue(myId)
+
+                                                // give them a place to meet
+                                                val locationList = /*mutableListOf<String>()*/
+                                                    listOf(
+                                                        "Bench in front of Ayres",
+                                                        "Engineering Courtyard",
+                                                        "HSS Lawn at table",
+                                                        "Min Kao 6th floor patio",
+                                                        "SU in front of Starbucks",
+                                                        "Starbucks in Hodges"
+                                                    )
+                                                val dateLocation = locationList[(0..5).random()]
+                                                println("Date location: " + dateLocation)
+                                                refToLocation.setValue(dateLocation)
+                                                //same location for date
+                                                refToDateLocation = database.getReference("users")
+                                                    .child(matchList.first())
+                                                refToDateLocation.child("dateLocation")
+                                                    .setValue(dateLocation)
+
+                                        }
+
+                                        override fun onCancelled(error: DatabaseError) {}
+                                    })
+
+                                    }
+                                    /*if(matchList.isEmpty()) {
+                                        myRef.setValue("None")
+                                    }*/
                             }
+
+
+
 
                         override fun onChildChanged(
                             snapshot: DataSnapshot,
                             previousChildName: String?
-                        ) {
-                            TODO("Not yet implemented")
-                        }
+                        ) { }
 
-                        override fun onChildRemoved(snapshot: DataSnapshot) {
-                            TODO("Not yet implemented")
-                        }
+                        override fun onChildRemoved(snapshot: DataSnapshot) { }
 
                         override fun onChildMoved(
                             snapshot: DataSnapshot,
                             previousChildName: String?
-                        ) {
-                            TODO("Not yet implemented")
-                        }
+                        ) { }
 
-                        override fun onCancelled(error: DatabaseError) {
-                            TODO("Not yet implemented")
-                        }
+                        override fun onCancelled(error: DatabaseError) { }
                     })
                 }
                 }
