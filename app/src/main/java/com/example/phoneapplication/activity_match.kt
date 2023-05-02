@@ -44,6 +44,8 @@ class activity_match : AppCompatActivity() {
         lateinit var userRef: DatabaseReference
         lateinit var myRef: DatabaseReference
         lateinit var refToDate: DatabaseReference
+        lateinit var refToLocation: DatabaseReference
+        lateinit var refToDateLocation: DatabaseReference
         val database =
             Firebase.database("https://phone-application-14522-default-rtdb.firebaseio.com")
         //val refDatabase = database.getReference("dateThisWeek")
@@ -67,6 +69,8 @@ class activity_match : AppCompatActivity() {
             userRef = database.getReference("users").child(myId).child("connections")
             myRef = database.getReference("users").child(myId)
                 .child("dateThisWeek")//.child("dateThisWeek")
+            refToLocation = database.getReference("users").child(myId).child("dateLocation")
+            //refToDate = database.getReference("users").child(myId).child("dateLocation")
 
             // use addListenerForSingleEvent to see if there is already a date there
             // If there is, don't match, but if there isn't, match
@@ -103,6 +107,18 @@ class activity_match : AppCompatActivity() {
                                     // set date's date to this person too
                                     refToDate = database.getReference("users").child(matchList.first())
                                     refToDate.child("dateThisWeek").setValue(myId)
+
+                                    // give them a place to meet
+                                    val locationList = /*mutableListOf<String>()*/ listOf("Bench in front of Ayres", "Engineering Courtyard",
+                                                               "HSS Lawn at table", "Min Kao 6th floor patio",
+                                                               "SU in front of Starbucks", "Starbucks in Hodges")
+                                    val dateLocation = locationList[(0..5).random()]
+                                    println("Date location: " + dateLocation)
+                                    refToLocation.setValue(dateLocation)
+                                    //same location for date
+                                    refToDateLocation = database.getReference("users").child(matchList.first())
+                                    refToDateLocation.child("dateLocation").setValue(dateLocation)
+
                                 } else {
                                     myRef.setValue("None")
 

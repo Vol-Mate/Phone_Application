@@ -78,6 +78,7 @@ open class swap_activity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_swap)
         setButton()
+        setButton2()
 
         //val userRef = FirebaseDatabase.getInstance().reference.child("users");
         val database = Firebase.database("https://phone-application-14522-default-rtdb.firebaseio.com/")
