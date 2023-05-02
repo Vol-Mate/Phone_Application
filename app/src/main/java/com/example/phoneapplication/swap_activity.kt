@@ -103,47 +103,38 @@ open class swap_activity : AppCompatActivity(){
         mAuth = FirebaseAuth.getInstance()
         val userId = mAuth.currentUser?.uid
 
-        if (userId != null) {
-            checkUserSex()
+        checkUserSex()
 
-            rowItems = ArrayList()
+        rowItems = ArrayList()
 
-            arrayAdapter = arrayAdapter(this, R.layout.item, rowItems)
+        arrayAdapter = arrayAdapter(this, R.layout.item, rowItems)
 
-            val flingContainer = findViewById<View>(R.id.frame) as SwipeFlingAdapterView
+        val flingContainer = findViewById<View>(R.id.frame) as SwipeFlingAdapterView
 
-            flingContainer.adapter = arrayAdapter
-            flingContainer.setFlingListener(object : onFlingListener {
-                override fun removeFirstObjectInAdapter() {
-                    Log.d("LIST", "removed object!")
-                    rowItems.removeAt(0)
-                    arrayAdapter.notifyDataSetChanged()
-                }
+        flingContainer.adapter = arrayAdapter
+        flingContainer.setFlingListener(object : onFlingListener {
+            override fun removeFirstObjectInAdapter() {
+                Log.d("LIST", "removed object!")
+                rowItems.removeAt(0)
+                arrayAdapter.notifyDataSetChanged()
+            }
 
-                override fun onLeftCardExit(dataObject: Any) {
-                    val obj = dataObject as cards
-                    val user = obj.getUserId()
-                    val database2 = Firebase.database("https://phone-application-14522.firebaseio.com/")
-                    userRef2 = database2.getReference("users")
-                    userRef.child(userId).child("connections").child("nope").child(user)
-                        .setValue(false)
-                    userRef2.child(userId).child("connections").child("nope").child(user)
-                        .setValue(false)
-                    Toast.makeText(this@swap_activity, "Left", Toast.LENGTH_SHORT).show()
-                }
+            override fun onLeftCardExit(dataObject: Any) {
+                val obj = dataObject as cards
+                val user = obj.getUserId()
+                userRef.child(userId.toString()).child("connections").child("nope").child(user)
+                    .setValue(false)
+                Toast.makeText(this@swap_activity, "Left", Toast.LENGTH_SHORT).show()
+            }
 
-                override fun onRightCardExit(dataObject: Any) {
-                    val obj = dataObject as cards
-                    val user = obj.getUserId()
-                    val database2 = Firebase.database("https://phone-application-14522.firebaseio.com/")
-                    userRef2 = database2.getReference("users")
-                    userRef.child(userId).child("connections").child("yeps").child(user)
-                        .setValue(true)
-                    userRef2.child(userId).child("connections").child("yeps").child(user)
-                        .setValue(true)
-                    //isConnectionMatch(userId)
-                    Toast.makeText(this@swap_activity, "Right", Toast.LENGTH_SHORT).show()
-                }
+            override fun onRightCardExit(dataObject: Any) {
+                val obj = dataObject as cards
+                val user = obj.getUserId()
+                userRef.child(userId.toString()).child("connections").child("yeps").child(user)
+                    .setValue(true)
+                //isConnectionMatch(userId)
+                Toast.makeText(this@swap_activity, "Right", Toast.LENGTH_SHORT).show()
+            }
 
                 override fun onAdapterAboutToEmpty(itemsInAdapter: Int) {}
                 override fun onScroll(scrollProgressPercent: Float) {}
@@ -153,7 +144,6 @@ open class swap_activity : AppCompatActivity(){
             flingContainer.setOnItemClickListener { _, _, _, _ ->
                 Toast.makeText(this@swap_activity, "Item Clicked", Toast.LENGTH_SHORT).show()
             }
-        }
     }
     private fun setButton() {
         button = findViewById<Button>(R.id.Back_Main)
@@ -177,9 +167,9 @@ open class swap_activity : AppCompatActivity(){
     // isConnectionMatch() function would go here
 
     private fun checkUserSex() {
-//        val database =
-//            Firebase.database("https://phone-application-14522-default-rtdb.firebaseio.com/")
-//        userRef = database.getReference("users")
+        val database =
+            Firebase.database("https://phone-application-14522-default-rtdb.firebaseio.com/")
+        userRef = database.getReference("users")
 
         mAuth = FirebaseAuth.getInstance()
         val user = mAuth.currentUser?.uid
@@ -209,8 +199,8 @@ open class swap_activity : AppCompatActivity(){
     }
 
     private fun getOppositeSexUsers() {
-//        val database = Firebase.database("https://phone-application-14522-default-rtdb.firebaseio.com/")
-//        userRef = database.getReference("users")
+        val database = Firebase.database("https://phone-application-14522-default-rtdb.firebaseio.com/")
+        userRef = database.getReference("users")
         mAuth = FirebaseAuth.getInstance()
         val userId = mAuth.currentUser?.uid
         userRef.addChildEventListener(object : ChildEventListener {
