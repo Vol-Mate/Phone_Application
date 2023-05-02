@@ -60,6 +60,22 @@ class User5(
     fun setAge(age: Int) {
         this.age = age
     }
+
+    fun getGender(): String {
+        return gender
+    }
+
+    fun setGender(gender: String) {
+        this.gender = gender
+    }
+
+    fun getGenderPref(): String {
+        return genderPref
+    }
+
+    fun setGenderPref (genderPref: String) {
+        this.genderPref = genderPref
+    }
 }
 
 open class swap_activity : AppCompatActivity(){
@@ -161,27 +177,40 @@ open class swap_activity : AppCompatActivity(){
     // isConnectionMatch() function would go here
 
     private fun checkUserSex() {
-        val user = FirebaseAuth.getInstance().currentUser
-        val userRef = userRef.child(user?.uid ?: "")
-        userRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    val user = dataSnapshot.getValue(User5::class.java)
-                    user?.let {
-                        userSex = user.gender
-                        oppositeUserSex = user.genderPref
-                        getOppositeSexUsers()
+//        val database =
+//            Firebase.database("https://phone-application-14522-default-rtdb.firebaseio.com/")
+//        userRef = database.getReference("users")
+
+        mAuth = FirebaseAuth.getInstance()
+        val user = mAuth.currentUser?.uid
+
+        user?.let {
+            userRef.orderByChild("userId").equalTo(user)
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            val currentUser =
+                                dataSnapshot.children.firstOrNull()?.getValue(User5::class.java)
+                            currentUser?.let {
+                                userSex = currentUser.getGender()
+                                oppositeUserSex = currentUser.getGenderPref()
+                                if(::userSex.isInitialized && ::oppositeUserSex.isInitialized) {
+                                    getOppositeSexUsers()
+                                }
+                            }
+                        }
                     }
-                }
-            }
 
-            override fun onCancelled(databaseError: DatabaseError) {
+                    override fun onCancelled(databaseError: DatabaseError) {
 
-            }
-        })
+                    }
+                })
+        }
     }
 
     private fun getOppositeSexUsers() {
+//        val database = Firebase.database("https://phone-application-14522-default-rtdb.firebaseio.com/")
+//        userRef = database.getReference("users")
         mAuth = FirebaseAuth.getInstance()
         val userId = mAuth.currentUser?.uid
         userRef.addChildEventListener(object : ChildEventListener {

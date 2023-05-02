@@ -110,9 +110,9 @@ class activity_match : AppCompatActivity() {
                                     refToDate.addListenerForSingleValueEvent(object: ValueEventListener {
                                         override fun onDataChange(myss: DataSnapshot) {
                                             do {
-                                                while(myss.getValue(String::class.java) == null){
-                                                    wait()
-                                                }
+//                                                while(myss.getValue(String::class.java) == null){
+//                                                    wait()
+//                                                }
 
                                                 println("refToDate")
                                                 refToDate = database.getReference("users").child(matchList.first()).child("dateThisWeek")
