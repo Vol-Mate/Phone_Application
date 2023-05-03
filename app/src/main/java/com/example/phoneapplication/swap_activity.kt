@@ -175,9 +175,11 @@ open class swap_activity : AppCompatActivity(){
         val user = mAuth.currentUser?.uid
 
         user?.let {
-            userRef.orderByChild("userId").equalTo(user)
+            userRef.orderByChild("userID").equalTo(user)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        println("Number of children: ${dataSnapshot.childrenCount}")
+                        print(dataSnapshot)
                         if (dataSnapshot.exists()) {
                             val currentUser =
                                 dataSnapshot.children.firstOrNull()?.getValue(User5::class.java)

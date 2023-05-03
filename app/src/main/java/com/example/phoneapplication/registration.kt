@@ -27,7 +27,7 @@ import com.google.firebase.ktx.Firebase
 
 @Keep
 class Users(
-    val userId: String = "",
+    val userID: String = "",
     val name: String = "",
     val email: String = "",
     val age: Int = 0,
@@ -114,13 +114,13 @@ class registration : AppCompatActivity() {
                 val credential = GoogleAuthProvider.getCredential(account.idToken, null)
                 auth.signInWithCredential(credential).addOnCompleteListener { authTask ->
                     if (authTask.isSuccessful) {
-                        val userId = auth.currentUser?.uid ?: ""
+                        val userID = auth.currentUser?.uid ?: ""
                         val name = account.displayName ?: ""
                         val email = account.email ?: ""
 
                         val answer = ""
                         val user2 = Users(
-                            userId = userId,
+                            userID = userID,
                             name = name,
                             email = email,
                             age = age,
@@ -141,13 +141,13 @@ class registration : AppCompatActivity() {
                         }*/
                         //val myRef = database.getReference
 
-                        val refToUser = database.child("users").child(userId)
+                        val refToUser = database.child("users").child(userID)
                         refToUser.addListenerForSingleValueEvent(object : ValueEventListener {
                             override fun onDataChange(snapshot: DataSnapshot) {
                                 // only write to the database if there isn't already a node there for it
                                 if (!snapshot.exists()) {
-                                    println(userId)
-                                    refToUser.child("userID").setValue(userId)
+                                    println(userID)
+                                    refToUser.child("userID").setValue(userID)
                                     refToUser.child("name").setValue(name)
                                     refToUser.child("email").setValue(email)
                                     refToUser./*child("permanentData").*/child("age").setValue(age)
@@ -172,9 +172,9 @@ class registration : AppCompatActivity() {
 
 
     private fun setupUserListener() {
-        val userId = auth.currentUser?.uid
-        if (userId != null) {
-            val userRef = usersRef.child(userId)
+        val userID = auth.currentUser?.uid
+        if (userID != null) {
+            val userRef = usersRef.child(userID)
             userRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val user = snapshot.getValue(Users::class.java)
