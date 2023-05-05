@@ -5,6 +5,7 @@ import android.content.ContentValues
 import android.content.ContentValues.TAG
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.TextView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
@@ -15,6 +16,7 @@ import com.google.firebase.ktx.Firebase
 // global variable to help w while loop later in code
 var otherPersonDate: String = ""
 var myDateThisWeek: String = ""
+var dateLocation: String = ""
 
 // everytime you click this button, it gives you a new date under "dateThisWeek"
 class myUser(
@@ -235,10 +237,7 @@ class activity_match : AppCompatActivity() {
             databaseRef = database.getReference("users")//.child(myId)//.child("connections")
             connectionsRef = database.getReference("users").child(myId).child("connections")
             refToMyDate = database.getReference("users").child(myId).child("dateThisWeek")
-            //myRef = database.getReference("users").child(myId)
-            //    .child("dateThisWeek")//.child("dateThisWeek")
             refToLocation = database.getReference("users").child(myId).child("dateLocation")
-            //refToDate = database.getReference("users").child(myId).child("dateLocation")
 
             // use addListenerForSingleEvent to see if there is already a date there
             // If there is, don't match, but if there isn't, match
@@ -280,8 +279,8 @@ class activity_match : AppCompatActivity() {
 
                                     //   override fun onDataChange(myss: DataSnapshot) {
                                     //otherPersonDate =
-                                     //   dataSnapshot.child(matchList.first()).child("dateThisWeek")
-                                     //       .getValue(String::class.java)!!
+                                    //   dataSnapshot.child(matchList.first()).child("dateThisWeek")
+                                    //       .getValue(String::class.java)!!
                                     //println("before loop other date" + otherPersonDate)
                                     //println("before loop my date: " + matchList.first())
 
@@ -291,8 +290,8 @@ class activity_match : AppCompatActivity() {
                                         println("my date: " + myDateThisWeek)
                                         //refToDate = database.getReference("users").child(matchList.first()).child("dateThisWeek")
                                         //val otherDate =
-                                         //   dataSnapshot.child(potentialDateThisWeek).child("dateThisWeek")
-                                          //      .getValue(String::class.java)
+                                        //   dataSnapshot.child(potentialDateThisWeek).child("dateThisWeek")
+                                        //      .getValue(String::class.java)
                                         //println("val of other person's date" + otherDate)
 
                                         //refToMyDate.setValue(potentialDateThisWeek)
@@ -332,7 +331,7 @@ class activity_match : AppCompatActivity() {
                                                 "SU in front of Starbucks",
                                                 "Starbucks in Hodges"
                                             )
-                                        val dateLocation = locationList[(0..5).random()]
+                                        dateLocation = locationList[(0..5).random()]
                                         println("Date location: " + dateLocation)
                                         refToLocation.setValue(dateLocation)
                                         //same location for date
@@ -363,13 +362,32 @@ class activity_match : AppCompatActivity() {
                         })
 
                     }
-                    /*if(matchList.isEmpty()) {
-                                    myRef.setValue("None")
-                                }*/
-                    //          }
 
-                    //override fun onCancelled(error: DatabaseError) {
-                    //}
+                    // print out the info
+                    // have to find it again in database and not use the data variable because
+                    // there is a possibility that they are clicking this button and coming to
+                    // this page after they have already gotten their match
+
+                    // go to refToMyDate and print it out
+                    // need to find the value of the date and then go to that date and find
+                    // the name
+                    databaseRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(dsnapshot: DataSnapshot) {
+                            //val dateName = dsnapshot.child().getValue(String::class.java)
+                            val datePrintedOut = findViewById<TextView>(R.id.dateName)
+                            //datePrintedOut.text = printOutDate // might be setText
+                        }
+                        override fun onCancelled(error: DatabaseError) { }
+                    })
+
+                    refToLocation.addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(dsnapshot: DataSnapshot) {
+                            val printOutLocation = dsnapshot.getValue(String::class.java)
+                            val datePrintedOut = findViewById<TextView>(R.id.locationText)
+                            datePrintedOut.text = printOutLocation // might be setText
+                        }
+                        override fun onCancelled(error: DatabaseError) { }
+                    })
 
                 }
 

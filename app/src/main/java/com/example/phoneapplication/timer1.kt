@@ -1,20 +1,11 @@
 package com.example.phoneapplication
 
-import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
-import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import java.util.*
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.TextView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -123,7 +114,7 @@ class MainActivity9 : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_match)
+        setContentView(R.layout.activity_timer1)
 
         //val userRef = FirebaseDatabase.getInstance().reference.child("users");
         val database = Firebase.database("https://phone-application-14522-default-rtdb.firebaseio.com/")
@@ -135,7 +126,7 @@ class MainActivity9 : AppCompatActivity() {
         getMatchData()
 
         rowItems = ArrayList()
-        arrayMatchAdapter = Array_match_adapter(this, R.layout.activity_match, rowItems)
+        arrayMatchAdapter = Array_match_adapter(this, R.layout.activity_timer1, rowItems)
 
         getMatchData()
 
