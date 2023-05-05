@@ -69,7 +69,7 @@
         tools:ignore="UnknownId" />
 
     <TextView
-        android:id="@+id/dateName"
+        android:id="@+id/dateNameText"
         android:layout_width="190dp"
         android:layout_height="39dp"
         android:textColor="@color/black"

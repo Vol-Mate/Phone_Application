@@ -162,7 +162,8 @@ class MainActivity9 : AppCompatActivity() {
         // Your code to retrieve the match data from the database
         val database =
             Firebase.database("https://phone-application-14522-default-rtdb.firebaseio.com/")
-        userRef = database.getReference("users")
+        lateinit var userRefToDate: DatabaseReference
+        //userRefToDate = database.getReference("users").
 
         mAuth = FirebaseAuth.getInstance()
         val user = mAuth.currentUser?.uid
@@ -171,11 +172,13 @@ class MainActivity9 : AppCompatActivity() {
         //arrayMatchAdapter = Array_match_adapter(this, R.layout.activity_match, rowItems)
 
         user?.let {
-            userRef.orderByChild("userID").equalTo(user)
-                .addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            val currentUser =
+            userRefToDate = database.getReference("users").child(user).child("dateThisWeek")
+            //userRefToDate.orderByChild("userID").equalTo(user)
+              //  .addListenerForSingleValueEvent(object : ValueEventListener {
+                //    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                  //      if (dataSnapshot.exists()) {
+                            userRefToDate.setValue("")
+                            /*val currentUser =
                                 dataSnapshot.children.firstOrNull()?.getValue(match1::class.java)
                             currentUser?.let {
                                 dateThisWeek = currentUser.getDate()
@@ -189,16 +192,16 @@ class MainActivity9 : AppCompatActivity() {
                                     rowItems.add(match)
                                     arrayMatchAdapter.notifyDataSetChanged()
                                 }
-                            }
+                            }*/
                         }
                     }
 
-                    override fun onCancelled(databaseError: DatabaseError) {}
+                    //override fun onCancelled(databaseError: DatabaseError) {}
 
 
-                })
-        }
-    }
+               // })
+        //})
+    //}
 }
 
 

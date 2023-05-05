@@ -373,9 +373,10 @@ class activity_match : AppCompatActivity() {
                     // the name
                     databaseRef.addListenerForSingleValueEvent(object : ValueEventListener {
                         override fun onDataChange(dsnapshot: DataSnapshot) {
-                            //val dateName = dsnapshot.child().getValue(String::class.java)
-                            val datePrintedOut = findViewById<TextView>(R.id.dateName)
-                            //datePrintedOut.text = printOutDate // might be setText
+                            val dateUserID = dsnapshot.child(myId).child("dateThisWeek").getValue(String::class.java)
+                            val dateName = dsnapshot.child(dateUserID!!).child("name").getValue(String::class.java)
+                            val datePrintedOut = findViewById<TextView>(R.id.dateNameText)
+                            datePrintedOut.text = dateName // might be setText
                         }
                         override fun onCancelled(error: DatabaseError) { }
                     })
