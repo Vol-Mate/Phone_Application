@@ -190,10 +190,14 @@ class myUser(
     }
 }*/
 class activity_match : AppCompatActivity() {
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         //FirebaseApp.initializeApp(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_match)
+        val notificationUtils = NotificationUtils(this)
+        notificationUtils.scheduleNotification()
 
         // where we call functions ie setButton()
         match()
@@ -399,3 +403,6 @@ class activity_match : AppCompatActivity() {
         }
     }
 }
+
+
+

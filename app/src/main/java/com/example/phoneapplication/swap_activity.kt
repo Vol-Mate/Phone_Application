@@ -20,7 +20,7 @@ import com.google.firebase.ktx.Firebase
 
 @Keep
 class User5(
-    internal var userId: String = "",
+    internal var userID: String = "",
     internal var name: String = "",
     internal var age: Int = 0,
     internal var answer: String= "",
@@ -29,12 +29,12 @@ class User5(
 ) {
     constructor() : this("", "", 0,"","","")
 
-    fun getUserId(): String {
-        return userId
+    fun getUserID(): String {
+        return userID
     }
 
-    fun setUserId(userId: String) {
-        this.userId = userId
+    fun setUserID(userID: String) {
+        this.userID = userID
     }
 
     fun getName(): String {
@@ -101,7 +101,7 @@ open class swap_activity : AppCompatActivity(){
         userRef = database.getReference("users")
 
         mAuth = FirebaseAuth.getInstance()
-        val userId = mAuth.currentUser?.uid
+        val userID = mAuth.currentUser?.uid
 
         checkUserSex()
 
@@ -122,7 +122,7 @@ open class swap_activity : AppCompatActivity(){
             override fun onLeftCardExit(dataObject: Any) {
                 val obj = dataObject as cards
                 val user = obj.getUserId()
-                userRef.child(userId.toString()).child("connections").child("nope").child(user)
+                userRef.child(userID.toString()).child("connections").child("nope").child(user)
                     .setValue(false)
                 Toast.makeText(this@swap_activity, "Left", Toast.LENGTH_SHORT).show()
             }
@@ -130,9 +130,9 @@ open class swap_activity : AppCompatActivity(){
             override fun onRightCardExit(dataObject: Any) {
                 val obj = dataObject as cards
                 val user = obj.getUserId()
-                userRef.child(userId.toString()).child("connections").child("yeps").child(user)
+                userRef.child(userID.toString()).child("connections").child("yeps").child(user)
                     .setValue(true)
-                //isConnectionMatch(userId)
+                //isConnectionMatch(userID)
                 Toast.makeText(this@swap_activity, "Right", Toast.LENGTH_SHORT).show()
             }
 
@@ -204,13 +204,13 @@ open class swap_activity : AppCompatActivity(){
         val database = Firebase.database("https://phone-application-14522-default-rtdb.firebaseio.com/")
         userRef = database.getReference("users")
         mAuth = FirebaseAuth.getInstance()
-        val userId = mAuth.currentUser?.uid
+        val userID = mAuth.currentUser?.uid
         userRef.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
                 val user = dataSnapshot.getValue(User5::class.java)
-                if (user != null && user.gender == oppositeUserSex && dataSnapshot.key != userId) {
-                    if (!dataSnapshot.child("connections").child("nope").hasChild(userId.toString())
-                        && !dataSnapshot.child("connections").child("yeps").hasChild(userId.toString())) {
+                if (user != null && user.gender == oppositeUserSex && dataSnapshot.key != userID) {
+                    if (!dataSnapshot.child("connections").child("nope").hasChild(userID.toString())
+                        && !dataSnapshot.child("connections").child("yeps").hasChild(userID.toString())) {
                         val item = cards(dataSnapshot.key ?: "", user.name, user.age.toString(),user.answer)
                         rowItems.add(item)
                         arrayAdapter.notifyDataSetChanged()

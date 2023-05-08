@@ -91,4 +91,5 @@
         app:layout_constraintTop_toTopOf="@+id/dateLocation"
         />
 
+
 </androidx.constraintlayout.widget.ConstraintLayout>
