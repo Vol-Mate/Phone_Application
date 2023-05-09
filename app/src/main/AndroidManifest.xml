@@ -41,6 +41,7 @@
         <activity android:name=".swap_activity" />
         <activity android:name=".main_menu" />
         <activity android:name=".question_activity" />
+        <activity android:name=".show_match" />
 
         <activity
             android:name=".MainActivity"

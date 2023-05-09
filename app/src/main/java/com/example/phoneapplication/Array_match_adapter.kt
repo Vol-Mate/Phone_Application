@@ -15,7 +15,7 @@ class Array_match_adapter<T>(context: Context?, resourceId: Int, items: List<mat
         val card_item = getItem(position)
         if (convertView == null) {
             val inflater = LayoutInflater.from(parent.context)
-            convertView = inflater.inflate(R.layout.activity_match, parent, false)
+            convertView = inflater.inflate(R.layout.activity_show_match, parent, false)
         }
         val dateThisWeek = convertView!!.findViewById<View>(R.id.dateMatch) as TextView
         val dateLocation = convertView!!.findViewById<View>(R.id.dateLocation) as TextView

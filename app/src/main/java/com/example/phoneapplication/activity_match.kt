@@ -1,12 +1,10 @@
 package com.example.phoneapplication
-import android.util.Log
-import android.content.ContentValues
-import android.content.ContentValues.TAG
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import android.widget.TextView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -23,7 +21,7 @@ class myUser(
 ){}
 
 class activity_match : AppCompatActivity() {
-
+    private lateinit var button: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         //FirebaseApp.initializeApp(this)
@@ -31,9 +29,18 @@ class activity_match : AppCompatActivity() {
         setContentView(R.layout.activity_match)
         val notificationUtils = NotificationUtils(this)
         notificationUtils.scheduleNotification()
+        setButton()
 
         // where we call functions ie setButton()
         match()
+    }
+
+    private fun setButton() {
+        button = findViewById<Button>(R.id.matches)
+        button.setOnClickListener {
+            val intent = Intent(this@activity_match, show_match::class.java)
+            startActivity(intent)
+        }
     }
 
     // where we define our functions ie
@@ -224,14 +231,14 @@ class activity_match : AppCompatActivity() {
                     //refToLocation.addListenerForSingleValueEvent(object : ValueEventListener{
                     //    override fun onDataChange(myNewSS: DataSnapshot){
                     //        val printOutLocation = myNewSS.getValue(String::class.java)
-                    println("dateLocation: " + dateLocation)
+                    /*println("dateLocation: " + dateLocation)
                     val locationPrintedOut = findViewById<TextView>(R.id.locationText)
                     locationPrintedOut.text = dateLocation // might be setText
 
                     println("name of date: " + myDateThisWeek)
                     val nameOfDate = dataSnapshot.child(myDateThisWeek).child("name").getValue(String::class.java)
                     val datePrintedOut = findViewById<TextView>(R.id.dateName)
-                    datePrintedOut.text = nameOfDate
+                    datePrintedOut.text = nameOfDate*/
                     //   }
 
                     //   override fun onCancelled(error: DatabaseError) { }

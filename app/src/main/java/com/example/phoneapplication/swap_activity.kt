@@ -233,7 +233,7 @@ open class swap_activity : AppCompatActivity(){
                     val item = cards(dataSnapshot.key ?: "", user.name, user.age.toString(),user.answer)
                     rowItems.add(item)
                     arrayAdapter.notifyDataSetChanged()
-                    // }
+                    //}
                 }
             }
 
