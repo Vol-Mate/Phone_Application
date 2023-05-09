@@ -62,7 +62,7 @@ class registration : AppCompatActivity() {
         setContentView(R.layout.activity_registration)
 
 
-        //        // Get references to EditText views
+        // Get references to EditText views
         ageEditText = findViewById(R.id.ageEditText)
         genderEditText = findViewById(R.id.genderSpinner)
         genderPrefEditText = findViewById(R.id.preferredGenderSpinner)
@@ -80,15 +80,7 @@ class registration : AppCompatActivity() {
         findViewById<Button>(R.id.gSignInBtn).setOnClickListener {
             signInGoogle()
         }
-        //setButton()
     }
-//   private fun setButton(){
-//        var button = findViewById<Button>(R.id.gSignInBtn)
-//        button.setOnClickListener {
-//            val intent = Intent(this, question_activity::class.java)
-//            startActivity(intent)
-//        }
-//    }
 
     private fun signInGoogle() {
         val signInIntent = googleSignInClient.signInIntent
@@ -128,32 +120,20 @@ class registration : AppCompatActivity() {
                             genderPref = genderPref,
                         )
 
-
-                        // Update the user's data in the Firebase Realtime Database
-                        // val userRef = usersRef.child(userId)
-                        /* usersRef.child(userId).setValue(user2).addOnCompleteListener { dbTask ->
-                            if (dbTask.isSuccessful) {
-                                Toast.makeText(this, "User updated in database", Toast.LENGTH_SHORT).show()
-                                setupUserListener()
-                            } else {
-                                Toast.makeText(this, task.exception.toString(), Toast.LENGTH_SHORT).show()
-                            }
-                        }*/
-                        //val myRef = database.getReference
-
                         val refToUser = database.child("users").child(userID)
                         refToUser.addListenerForSingleValueEvent(object : ValueEventListener {
                             override fun onDataChange(snapshot: DataSnapshot) {
-                                // only write to the database if there isn't already a node there for it
+                                // Only write to the database if there isn't already a node there for it
+                                // Ensures that data that is already there is not overridden
                                 if (!snapshot.exists()) {
                                     println(userID)
                                     refToUser.child("userID").setValue(userID)
                                     refToUser.child("name").setValue(name)
                                     refToUser.child("email").setValue(email)
-                                    refToUser./*child("permanentData").*/child("age").setValue(age)
-                                    refToUser./*child("permanentData").*/child("gender")
+                                    refToUser.child("age").setValue(age)
+                                    refToUser.child("gender")
                                         .setValue(gender)
-                                    refToUser/*.child("permanentData")*/.child("genderPref")
+                                    refToUser.child("genderPref")
                                         .setValue(genderPref)
                                     refToUser.child("dateThisWeek")
                                         .setValue("")
@@ -179,11 +159,9 @@ class registration : AppCompatActivity() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val user = snapshot.getValue(Users::class.java)
                     if (user != null) {
-                        // Do something with the user data
                     }
                 }
                 override fun onCancelled(error: DatabaseError) {
-                    // Handle error
                 }
             })
         }
@@ -200,8 +178,4 @@ class registration : AppCompatActivity() {
         val intent = Intent(this, main_menu::class.java)
         startActivity(intent)
     }
-            }
-        //}
-    //}
-//}
-
+}
