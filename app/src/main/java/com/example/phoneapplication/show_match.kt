@@ -13,16 +13,14 @@ import com.google.firebase.ktx.Firebase
 
 class show_match : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
-        //FirebaseApp.initializeApp(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_match)
         showMatches()
     }
 
     private fun showMatches() {
+        // Get an instance of the database
         lateinit var databaseRef: DatabaseReference
-        //lateinit var refToMyDate: DatabaseReference
-        //lateinit var refToLocation: DatabaseReference
         val database =
             Firebase.database("https://phone-application-14522-default-rtdb.firebaseio.com")
 
@@ -34,15 +32,19 @@ class show_match : AppCompatActivity(){
             val myId = it.uid
             databaseRef = database.getReference("users")
 
+            // Use addListenerForSingleValueEvent to get a value one time
             databaseRef.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    // Get the name of the date
                     val valueOfDate =
                         dataSnapshot.child(myId).child("dateThisWeek").getValue(String::class.java)
                     val nameOfDate = dataSnapshot.child(valueOfDate!!).child("name").getValue(String::class.java)
+
+                    // Get the value of the date
                     val valueOfLocation =
                         dataSnapshot.child(myId).child("dateLocation").getValue(String::class.java)
 
-
+                    // Display both date name and location on the app itself
                     val datePrintedOut = findViewById<TextView>(R.id.dateName)
                     datePrintedOut.text = nameOfDate // might be setText
 
@@ -54,28 +56,5 @@ class show_match : AppCompatActivity(){
                 override fun onCancelled(error: DatabaseError) { }
             })
         }
-
-
     }
-
 }
-/*databaseRef.addListenerForSingleValueEvent(object : ValueEventListener {
-    override fun onDataChange(dsnapshot: DataSnapshot) {
-        // val dateName = dsnapshot.child().getValue(String::class.java)
-        val datePrintedOut = findViewById<TextView>(R.id.dateName)
-        // datePrintedOut.text = printOutDate // might be setText
-        // if that place != null else the datePrintedOut = "None- sorry!"
-    }
-    override fun onCancelled(error: DatabaseError) { }
-})*/
-//refToLocation.addListenerForSingleValueEvent(object : ValueEventListener{
-//    override fun onDataChange(myNewSS: DataSnapshot){
-//        val printOutLocation = myNewSS.getValue(String::class.java)
-/*println("dateLocation: " + dateLocation)
-val locationPrintedOut = findViewById<TextView>(R.id.locationText)
-locationPrintedOut.text = dateLocation // might be setText
-
-println("name of date: " + myDateThisWeek)
-val nameOfDate = dataSnapshot.child(myDateThisWeek).child("name").getValue(String::class.java)
-val datePrintedOut = findViewById<TextView>(R.id.dateName)
-datePrintedOut.text = nameOfDate*/
