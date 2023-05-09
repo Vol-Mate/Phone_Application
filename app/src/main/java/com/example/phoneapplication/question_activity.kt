@@ -1,6 +1,6 @@
 package com.example.phoneapplication
 
-import android.annotation.SuppressLint
+/*import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -9,7 +9,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import com.example.phoneapplication.question_activity.Companion.RC_SIGN_IN
+//import com.example.phoneapplication.question_activity.Companion.RC_SIGN_IN
 import com.example.phoneapplication.registration.Companion.RC_SIGN_IN
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -23,14 +23,89 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import androidx.annotation.Keep
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInClient*/
 
-@Keep
+//package com.example.phoneapplication
+//import java.util.Vector
+import android.util.Log
+import android.content.ContentValues
+import android.content.ContentValues.TAG
+import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
+
+// told to do this from online
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DatabaseError
+
+class question_activity : AppCompatActivity() {
+    private lateinit var button: Button
+    override fun onCreate(savedInstanceState: Bundle?) {
+        //FirebaseApp.initializeApp(this)
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_question)
+        // where we call functions ie setButton()
+        setButton()
+        putAnswerInDatabase()
+    }
+
+
+    private fun putAnswerInDatabase(){
+
+        // get a reference of the database
+        lateinit var userRef: DatabaseReference
+        lateinit var myRef: DatabaseReference
+        val database = Firebase.database("https://phone-application-14522-default-rtdb.firebaseio.com/")
+        //val refDatabase = database.getReference("dateThisWeek")
+
+        // get this user specifically
+        var mAuth: FirebaseAuth//.getInstance()
+        mAuth = FirebaseAuth.getInstance()
+
+
+        button.setOnClickListener{
+            val editText = findViewById<EditText>(R.id.questionInput)
+            val userInput = editText.text.toString()
+            println(userInput)
+
+            val user = mAuth.currentUser
+            user?.let {
+                val myId = it.uid
+
+                userRef= database.getReference("users").child(myId).child("answer")//.child("dateThisWeek")
+            }
+            userRef.setValue(userInput)
+            setButton()
+        }
+    }
+
+    private fun setButton() {
+        button = findViewById<Button>(R.id.button)
+        button.setOnClickListener {
+            val intent = Intent(this, main_menu::class.java)
+            startActivity(intent)
+        }
+    }
+
+}
+
+
+
+/*@Keep
 
  class User(
     val userId: String = "",
     val name: String = "",
     val answer: String= "",
+    val dateThisWeek: String= ""
 ) {
     // add other methods as needed
     constructor() : this("")
@@ -162,7 +237,7 @@ private fun signInGoogle() {
         startActivity(intent)
     }
 
-}
+}*/
 //*package com.example.phoneapplication
 //
 //import android.app.Activity

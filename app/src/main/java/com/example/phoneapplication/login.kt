@@ -1,3 +1,5 @@
+// Allows the user to login without overriding their data
+// Uses google auth
 package com.example.phoneapplication
 
 import android.annotation.SuppressLint
@@ -29,6 +31,7 @@ import androidx.annotation.Keep
     val userId: String = "",
     val name: String = "",
     val email: String = "",
+    val dateThisWeek: String = ""
 ) {
     constructor() : this("", "", "")
 
@@ -104,7 +107,7 @@ class login : AppCompatActivity() {
                         )
 
                         // Update the user's data in the Firebase Realtime Database
-                        usersRef.child(userId).setValue(user1).addOnCompleteListener { task ->
+                        /*usersRef.child(userId).setValue(user1).addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 Toast.makeText(this, "User updated in database", Toast.LENGTH_SHORT)
                                     .show()
@@ -113,7 +116,22 @@ class login : AppCompatActivity() {
                                 Toast.makeText(this, task.exception.toString(), Toast.LENGTH_SHORT)
                                     .show()
                             }
-                        }
+                        }*/
+                        val refToUser = database.child("users").child(userId)
+                        refToUser.addListenerForSingleValueEvent(object : ValueEventListener {
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                // only write to the database if there isn't already a node there for it
+                                if (!snapshot.exists()) {
+                                    println(userId)
+                                    refToUser.child("userID").setValue(userId)
+                                    refToUser.child("name").setValue(name)
+                                    refToUser.child("email").setValue(email)
+                                }
+                            }
+
+                            override fun onCancelled(error: DatabaseError) {
+                            }
+                        })
                     } else {
                         Toast.makeText(
                             this,

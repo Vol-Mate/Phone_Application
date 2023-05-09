@@ -1,3 +1,5 @@
+// Creates a new user node in the database with infromation regarding the user
+// Uses google auth
 package com.example.phoneapplication
 
 import android.annotation.SuppressLint
@@ -27,17 +29,21 @@ import com.google.firebase.ktx.Firebase
 
 @Keep
 class Users(
-    val userId: String = "",
+    val userID: String = "",
     val name: String = "",
     val email: String = "",
-    val age: String = "",
+    val age: Int = 0,
+    val answer: String="",
     val gender: String = "",
-    val genderPref: String = ""
+    val genderPref: String = "",
+    val dateThisWeek: String = ""
 ) {
     // add other methods as needed
-    constructor() : this("", "", "", "","", "")
+    constructor() : this("", "", "", 0,"","", "")
 }
 class registration : AppCompatActivity() {
+    // val database = Firebase.database("https://phone-application-14522-default-rtdb.firebaseio.com/")
+    // check is we have access to the users node
     val database = Firebase.database.reference
     val usersRef = database.child("users")
     companion object {
@@ -46,7 +52,7 @@ class registration : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
-    private lateinit var ageEditText: Spinner
+    private lateinit var ageEditText: EditText
     private lateinit var genderEditText: Spinner
     private lateinit var genderPrefEditText: Spinner
 
@@ -57,11 +63,13 @@ class registration : AppCompatActivity() {
         FirebaseApp.initializeApp(this)
         setContentView(R.layout.activity_registration)
 
-        auth = FirebaseAuth.getInstance()
-        //        // Get references to EditText views
+
+        // Get references to EditText views
         ageEditText = findViewById(R.id.ageEditText)
         genderEditText = findViewById(R.id.genderSpinner)
         genderPrefEditText = findViewById(R.id.preferredGenderSpinner)
+
+        auth = FirebaseAuth.getInstance()
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -73,14 +81,6 @@ class registration : AppCompatActivity() {
 
         findViewById<Button>(R.id.gSignInBtn).setOnClickListener {
             signInGoogle()
-        }
-        setButton()
-    }
-   private fun setButton(){
-        var button = findViewById<Button>(R.id.gSignInBtn)
-        button.setOnClickListener {
-            val intent = Intent(this, question_activity::class.java)
-            startActivity(intent)
         }
     }
 
@@ -102,59 +102,68 @@ class registration : AppCompatActivity() {
             if (account != null) {
                 // Get values from EditText views
                 val gender = genderEditText.selectedItem.toString()
-                val age = ageEditText.selectedItem.toString()
+                val age = ageEditText.text.toString().toIntOrNull() ?: 0
                 val genderPref = genderPrefEditText.selectedItem.toString()
 
                 val credential = GoogleAuthProvider.getCredential(account.idToken, null)
                 auth.signInWithCredential(credential).addOnCompleteListener { authTask ->
                     if (authTask.isSuccessful) {
-                        val userId = auth.currentUser?.uid ?: ""
+                        val userID = auth.currentUser?.uid ?: ""
                         val name = account.displayName ?: ""
                         val email = account.email ?: ""
 
                         val answer = ""
-                        val user2 = Users (
-                            userId=userId,
-                            name=name,
-                            email=email,
-                            age=age,
-                            gender=gender,
-                            genderPref=genderPref,
+                        val user2 = Users(
+                            userID = userID,
+                            name = name,
+                            email = email,
+                            age = age,
+                            gender = gender,
+                            genderPref = genderPref,
                         )
 
-
-                        // Update the user's data in the Firebase Realtime Database
-                        val userRef = usersRef.child(userId)
-                        usersRef.child(userId).setValue(user2).addOnCompleteListener { dbTask ->
-                            if (dbTask.isSuccessful) {
-                                Toast.makeText(this, "User updated in database", Toast.LENGTH_SHORT).show()
-                                setupUserListener()
-                            } else {
-                                Toast.makeText(this, task.exception.toString(), Toast.LENGTH_SHORT).show()
+                        val refToUser = database.child("users").child(userID)
+                        refToUser.addListenerForSingleValueEvent(object : ValueEventListener {
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                // Only write to the database if there isn't already a node there for it
+                                // Ensures that data that is already there is not overridden
+                                if (!snapshot.exists()) {
+                                    println(userID)
+                                    refToUser.child("userID").setValue(userID)
+                                    refToUser.child("name").setValue(name)
+                                    refToUser.child("email").setValue(email)
+                                    refToUser.child("age").setValue(age)
+                                    refToUser.child("gender")
+                                        .setValue(gender)
+                                    refToUser.child("genderPref")
+                                        .setValue(genderPref)
+                                    refToUser.child("dateThisWeek")
+                                        .setValue("")
+                                }
                             }
-                        }
+
+                            override fun onCancelled(error: DatabaseError) {
+                            }
+                        })
                     }
+
                 }
             }
-
-        } else {
-            Toast.makeText(this, task.exception.toString(), Toast.LENGTH_SHORT).show()
         }
     }
 
+
     private fun setupUserListener() {
-        val userId = auth.currentUser?.uid
-        if (userId != null) {
-            val userRef = usersRef.child(userId)
+        val userID = auth.currentUser?.uid
+        if (userID != null) {
+            val userRef = usersRef.child(userID)
             userRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val user = snapshot.getValue(Users::class.java)
                     if (user != null) {
-                        // Do something with the user data
                     }
                 }
                 override fun onCancelled(error: DatabaseError) {
-                    // Handle error
                 }
             })
         }
@@ -171,6 +180,4 @@ class registration : AppCompatActivity() {
         val intent = Intent(this, main_menu::class.java)
         startActivity(intent)
     }
-
 }
-
