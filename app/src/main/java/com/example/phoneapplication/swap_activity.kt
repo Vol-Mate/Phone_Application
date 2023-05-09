@@ -20,7 +20,7 @@ import com.google.firebase.ktx.Firebase
 
 @Keep
 class User5(
-    internal var userID: String = "",
+    internal var userId: String = "",
     internal var name: String = "",
     internal var age: Int = 0,
     internal var answer: String= "",
@@ -29,12 +29,12 @@ class User5(
 ) {
     constructor() : this("", "", 0,"","","")
 
-    fun getUserID(): String {
-        return userID
+    fun getUserId(): String {
+        return userId
     }
 
-    fun setUserID(userID: String) {
-        this.userID = userID
+    fun setUserId(userId: String) {
+        this.userId = userId
     }
 
     fun getName(): String {
@@ -78,12 +78,17 @@ class User5(
     }
 }
 
+// Code inspired by: https://www.youtube.com/playlist?list=PLxabZQCAe5fio9dm1Vd0peIY6HLfo5MCf
 open class swap_activity : AppCompatActivity(){
+    // DatabaseReference objects that will be used to access the Firebase Realtime Database.
     private lateinit var userRef: DatabaseReference
     private lateinit var userRef2: DatabaseReference
+    // Cards is an array of cards objects, which represent user profiles that will be displayed to the user.
     private lateinit var cards: Array<cards>
+    // arrayAdapter is an adapter used to display the cards objects in a ListView
     private lateinit var arrayAdapter: arrayAdapter<cards>
     private var i: Int = 0
+    // mAuth is an instance of FirebaseAuth used for authentication
     private lateinit var mAuth: FirebaseAuth
     private lateinit var listView: ListView
     private lateinit var rowItems: MutableList<cards>
@@ -96,15 +101,19 @@ open class swap_activity : AppCompatActivity(){
         setButton()
         setButton2()
 
-        //val userRef = FirebaseDatabase.getInstance().reference.child("users");
+        // creates a FirebaseDatabase object and initializes it with the URL of the Firebase Realtime Database.
+        // It then gets a DatabaseReference object that points to the "users" node of the database, and assigns it to the userRef variable.
         val database = Firebase.database("https://phone-application-14522-default-rtdb.firebaseio.com/")
         userRef = database.getReference("users")
 
+        // gets current userID
         mAuth = FirebaseAuth.getInstance()
-        val userID = mAuth.currentUser?.uid
+        val userId = mAuth.currentUser?.uid
 
         checkUserSex()
 
+        // create a new ArrayList called rowItems, which will hold the cards objects to be displayed,
+        // and a new arrayAdapter object that will display the rowItems in the ListView
         rowItems = ArrayList()
 
         arrayAdapter = arrayAdapter(this, R.layout.item, rowItems)
@@ -113,37 +122,39 @@ open class swap_activity : AppCompatActivity(){
 
         flingContainer.adapter = arrayAdapter
         flingContainer.setFlingListener(object : onFlingListener {
-            override fun removeFirstObjectInAdapter() {
+            override fun removeFirstObjectInAdapter() { // Define what happens when the first object is removed from the adapter.
                 Log.d("LIST", "removed object!")
-                rowItems.removeAt(0)
-                arrayAdapter.notifyDataSetChanged()
+                rowItems.removeAt(0) // Remove the first object from the rowItems list.
+                arrayAdapter.notifyDataSetChanged() // Notify the adapter that the data has changed.
             }
 
+            // Define what happens when the user swipes left on a card.
             override fun onLeftCardExit(dataObject: Any) {
                 val obj = dataObject as cards
                 val user = obj.getUserId()
-                userRef.child(userID.toString()).child("connections").child("nope").child(user)
-                    .setValue(false)
+                userRef.child(userId.toString()).child("connections").child("nope").child(user)
+                    .setValue(false) // Add the user to the 'nope' connections of the current user.
                 Toast.makeText(this@swap_activity, "Left", Toast.LENGTH_SHORT).show()
             }
 
+            // Define what happens when the user swipes right on a card.
             override fun onRightCardExit(dataObject: Any) {
                 val obj = dataObject as cards
                 val user = obj.getUserId()
-                userRef.child(userID.toString()).child("connections").child("yeps").child(user)
-                    .setValue(true)
-                //isConnectionMatch(userID)
+                userRef.child(userId.toString()).child("connections").child("yeps").child(user)
+                    .setValue(true) // Add the user to the 'yeps' connections of the current user.
+                //isConnectionMatch(userId)
                 Toast.makeText(this@swap_activity, "Right", Toast.LENGTH_SHORT).show()
             }
 
-                override fun onAdapterAboutToEmpty(itemsInAdapter: Int) {}
-                override fun onScroll(scrollProgressPercent: Float) {}
-            })
+            override fun onAdapterAboutToEmpty(itemsInAdapter: Int) {}
+            override fun onScroll(scrollProgressPercent: Float) {}
+        })
 
-            // Optionally add an OnItemClickListener
-            flingContainer.setOnItemClickListener { _, _, _, _ ->
-                Toast.makeText(this@swap_activity, "Item Clicked", Toast.LENGTH_SHORT).show()
-            }
+        // Optionally add an OnItemClickListener
+        flingContainer.setOnItemClickListener { _, _, _, _ ->
+            Toast.makeText(this@swap_activity, "Item Clicked", Toast.LENGTH_SHORT).show()
+        }
     }
     private fun setButton() {
         button = findViewById<Button>(R.id.Back_Main)
@@ -175,15 +186,18 @@ open class swap_activity : AppCompatActivity(){
         val user = mAuth.currentUser?.uid
 
         user?.let {
+            // Query the "users" node in the Firebase Realtime Database for the current user's data by their userID.
+            // and attach a listener to the query to listen for a single value event (i.e., the user's data).
             userRef.orderByChild("userID").equalTo(user)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
+                    // Define a callback to be invoked when the data at the specified location changes.
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        println("Number of children: ${dataSnapshot.childrenCount}")
-                        print(dataSnapshot)
                         if (dataSnapshot.exists()) {
+                            // Retrieve the current user's data and map it to a User5 object using the getValue() method.
                             val currentUser =
                                 dataSnapshot.children.firstOrNull()?.getValue(User5::class.java)
                             currentUser?.let {
+                                // Set the userSex and oppositeUserSex variables to the current user's gender and preference for the opposite sex, respectively.
                                 userSex = currentUser.getGender()
                                 oppositeUserSex = currentUser.getGenderPref()
                                 if(::userSex.isInitialized && ::oppositeUserSex.isInitialized) {
@@ -204,17 +218,22 @@ open class swap_activity : AppCompatActivity(){
         val database = Firebase.database("https://phone-application-14522-default-rtdb.firebaseio.com/")
         userRef = database.getReference("users")
         mAuth = FirebaseAuth.getInstance()
-        val userID = mAuth.currentUser?.uid
+        val userId = mAuth.currentUser?.uid
+        // Add a child event listener to the "users" node in the database to listen for changes to the child nodes
         userRef.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
                 val user = dataSnapshot.getValue(User5::class.java)
-                if (user != null && user.gender == oppositeUserSex && dataSnapshot.key != userID) {
-                    if (!dataSnapshot.child("connections").child("nope").hasChild(userID.toString())
-                        && !dataSnapshot.child("connections").child("yeps").hasChild(userID.toString())) {
-                        val item = cards(dataSnapshot.key ?: "", user.name, user.age.toString(),user.answer)
-                        rowItems.add(item)
-                        arrayAdapter.notifyDataSetChanged()
-                    }
+                // Check if the retrieved user data is not null and if the user's gender matches the oppositeUserSex
+                // Also, check if the user's ID is not equal to the current user's ID to avoid displaying the current user's profile
+                if (user != null && user.gender == oppositeUserSex && dataSnapshot.key != userId) {
+                    // Check if the current user has not already swiped left or right on the displayed user's profile
+                    //if (!dataSnapshot.child("connections").child("nope").hasChild(userId.toString())
+                    //    && !dataSnapshot.child("connections").child("yeps").hasChild(userId.toString())) {
+                    // Create a new card item using the displayed user's data and add it to the list of row items
+                    val item = cards(dataSnapshot.key ?: "", user.name, user.age.toString(),user.answer)
+                    rowItems.add(item)
+                    arrayAdapter.notifyDataSetChanged()
+                    // }
                 }
             }
 
