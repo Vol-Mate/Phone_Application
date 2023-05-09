@@ -1,3 +1,5 @@
+// Creates a new user node in the database with infromation regarding the user
+// Uses google auth
 package com.example.phoneapplication
 
 import android.annotation.SuppressLint

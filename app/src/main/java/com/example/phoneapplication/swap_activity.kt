@@ -79,6 +79,7 @@ class User5(
 }
 
 // Code inspired by: https://www.youtube.com/playlist?list=PLxabZQCAe5fio9dm1Vd0peIY6HLfo5MCf
+// Code creates swap cards for users to view their preferred gender profiles and swipe on profiles. Then sends the connections (RIGHT OR LEFT) to the firebase for matching.
 open class swap_activity : AppCompatActivity(){
     // DatabaseReference objects that will be used to access the Firebase Realtime Database.
     private lateinit var userRef: DatabaseReference

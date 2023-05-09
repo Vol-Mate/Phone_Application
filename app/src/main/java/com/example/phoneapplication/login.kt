@@ -1,3 +1,5 @@
+// Allows the user to login without overriding their data
+// Uses google auth
 package com.example.phoneapplication
 
 import android.annotation.SuppressLint
