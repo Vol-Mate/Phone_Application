@@ -29,6 +29,7 @@ import com.google.firebase.ktx.Firebase
 
 @Keep
 class Users(
+    // data class which has all the user information
     val userID: String = "",
     val name: String = "",
     val email: String = "",
@@ -41,8 +42,7 @@ class Users(
     // add other methods as needed
     constructor() : this("", "", "", 0,"","", "")
 }
-class registration : AppCompatActivity() {
-    // val database = Firebase.database("https://phone-application-14522-default-rtdb.firebaseio.com/")
+class registration : AppCompatActivity(){
     // check is we have access to the users node
     val database = Firebase.database.reference
     val usersRef = database.child("users")
@@ -105,7 +105,10 @@ class registration : AppCompatActivity() {
                 val age = ageEditText.text.toString().toIntOrNull() ?: 0
                 val genderPref = genderPrefEditText.selectedItem.toString()
 
+                // Gets the Google sign-in credential
                 val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+
+                // Sign in to Firebase with the credential
                 auth.signInWithCredential(credential).addOnCompleteListener { authTask ->
                     if (authTask.isSuccessful) {
                         val userID = auth.currentUser?.uid ?: ""
@@ -152,7 +155,7 @@ class registration : AppCompatActivity() {
         }
     }
 
-
+    // sets up a listener for the current user's data in database
     private fun setupUserListener() {
         val userID = auth.currentUser?.uid
         if (userID != null) {
@@ -169,7 +172,7 @@ class registration : AppCompatActivity() {
         }
     }
 
-
+    // after google sign in, this function is called to process the result and start next activity
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 

@@ -28,6 +28,7 @@ import androidx.annotation.Keep
 
 @Keep
  class User1(
+    // data class which has the user information
     val userId: String = "",
     val name: String = "",
     val email: String = "",
@@ -38,6 +39,7 @@ import androidx.annotation.Keep
 }
 
 class login : AppCompatActivity() {
+    // get reference to the firebase database
     val database = Firebase.database.reference
     val usersRef = database.child("users")
 
@@ -50,44 +52,47 @@ class login : AppCompatActivity() {
 
     
     @SuppressLint("MissingInflatedId")
+    // initializes  FirebaseAuth and GoogleSignInClient, and sets up the Google sign-in button click listener
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        // get instance of firebaseAuth
         auth = FirebaseAuth.getInstance()
 
+        // google sign in options with desired sign in options
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
 
+        // google sign in client with the specified options
         googleSignInClient = GoogleSignIn.getClient(this, gso)
+        //sign out the user
         googleSignInClient.signOut()
 
+        // sets the google sign in button
         findViewById<Button>(R.id.gSignInBtn).setOnClickListener {
             signInGoogle()
         }
-        //setButton()
     }
+
+    // launches the google sign in
     private fun signInGoogle() {
         val signInIntent = googleSignInClient.signInIntent
         launcher.launch(signInIntent)
     }
 
+    // creates a launcher for handling the result of sign in
     private val launcher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            //check if sign in was successful
             if (result.resultCode == Activity.RESULT_OK) {
                 val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
                 handleResults(task)
             }
         }
-    /*private fun setButton(){
-        var button = findViewById<Button>(R.id.gSignInBtn)
-        button.setOnClickListener {
-            val intent = Intent(this, main_menu::class.java)
-            startActivity(intent)
-        }
-    }*/
 
+    // retrieves the GoogleSignInAccount from the task and signs in to Firebase by using account's data
     private fun handleResults(task: Task<GoogleSignInAccount>) {
         if (task.isSuccessful) {
             val account: GoogleSignInAccount? = task.result
@@ -100,29 +105,21 @@ class login : AppCompatActivity() {
                         val name = account.displayName ?: ""
                         val email = account.email ?: ""
 
+                        // Creates a User1 object with user information
                         val user1 = User1(
                             userId = userId,
                             name = name,
                             email = email
                         )
 
-                        // Update the user's data in the Firebase Realtime Database
-                        /*usersRef.child(userId).setValue(user1).addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                Toast.makeText(this, "User updated in database", Toast.LENGTH_SHORT)
-                                    .show()
-                                setupUserListener()
-                            } else {
-                                Toast.makeText(this, task.exception.toString(), Toast.LENGTH_SHORT)
-                                    .show()
-                            }
-                        }*/
+                        // Gets a reference to the user's node in the "users" collection in the database
                         val refToUser = database.child("users").child(userId)
                         refToUser.addListenerForSingleValueEvent(object : ValueEventListener {
                             override fun onDataChange(snapshot: DataSnapshot) {
                                 // only write to the database if there isn't already a node there for it
                                 if (!snapshot.exists()) {
                                     println(userId)
+                                    // Set the values for "userID", "name", and "email" in the user's node
                                     refToUser.child("userID").setValue(userId)
                                     refToUser.child("name").setValue(name)
                                     refToUser.child("email").setValue(email)
@@ -130,9 +127,11 @@ class login : AppCompatActivity() {
                             }
 
                             override fun onCancelled(error: DatabaseError) {
+                                // Handles database errors
                             }
                         })
                     } else {
+                        // shows a toast message if failed to update user in the database
                         Toast.makeText(
                             this,
                             "Failed to update user in database",
@@ -141,12 +140,14 @@ class login : AppCompatActivity() {
                     }
                 }
             } else {
+                // shows a toast message with the exception if the account is null
                 Toast.makeText(this, task.exception.toString(), Toast.LENGTH_SHORT)
                     .show()
             }
         }
     }
 
+    // sets up a listener for the current user's data in database
     private fun setupUserListener() {
         val userId = auth.currentUser?.uid ?: ""
         usersRef.child(userId).addListenerForSingleValueEvent(object : ValueEventListener {
@@ -169,8 +170,7 @@ class login : AppCompatActivity() {
             })
         }
 
-
-
+    // after google sign in, this function is called to process the result and start next activity
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
